@@ -1,0 +1,36 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-mark">LLWC</p>
+      <p class="footer-tag">Ads that pay for themselves. Software that runs them.</p>
+    </div>
+    <nav aria-label="Footer">
+      <ul>
+        <li><a href="#offer">What you get</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="mailto:hello@example.com">hello@example.com</a></li>
+      </ul>
+    </nav>
+    <p class="footer-legal">© {year} LLWC. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .footer { padding-block: 3rem; margin-top: var(--section); border-top: 1px solid var(--line); }
+  .footer-inner { display: grid; gap: 2rem; }
+  @media (min-width: 48rem) {
+    .footer-inner { grid-template-columns: 1fr auto; align-items: start; }
+    .footer-legal { grid-column: 1 / -1; }
+  }
+  .footer-mark { font-family: var(--font-display); font-weight: 500; font-size: 1.25rem; }
+  .footer-tag { color: var(--ink-3); font-size: var(--t-small); margin-top: 0.4rem; }
+  .footer nav ul { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+  .footer nav a { font-size: var(--t-small); color: var(--ink-2); transition: color 0.25s var(--ease-out); }
+  .footer nav a:hover { color: var(--brass); }
+  .footer-legal { font-family: var(--font-mono); font-size: var(--t-label); color: var(--ink-3); letter-spacing: 0.06em; }
+</style>

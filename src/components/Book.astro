@@ -1,0 +1,117 @@
+---
+// Placeholder integrations. Swap CAL_URL for the real Cal.com link and
+// FORM_ENDPOINT for a Formspree (or similar) endpoint in the next round.
+const CAL_URL = 'https://cal.com/llwc/intro';
+const FORM_ENDPOINT = '#';
+---
+
+<section class="section book" id="book" aria-labelledby="book-title">
+  <div class="wrap book-grid">
+    <div class="book-copy">
+      <p class="label" data-reveal>Book a call</p>
+      <h2 id="book-title" class="display" data-reveal style="--i:1">
+        Twenty minutes.<br />You leave with <em>a plan.</em>
+      </h2>
+      <p class="lede" data-reveal style="--i:2">
+        No pitch deck. We ask about your business, tell you honestly whether ads will work for
+        you, and if they will, send a one-page plan the same day.
+      </p>
+      <div class="book-cal" data-reveal style="--i:3">
+        <a href={CAL_URL} class="btn btn-primary" target="_blank" rel="noopener">Pick a time on the calendar</a>
+        <p class="book-note">Opens our calendar. Takes 30 seconds.</p>
+      </div>
+    </div>
+
+    <form class="book-form" action={FORM_ENDPOINT} method="post" data-reveal style="--i:2" novalidate>
+      <p class="form-intro">Prefer to write? Three fields, that is it.</p>
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" autocomplete="name" required />
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required />
+      </div>
+      <div class="field">
+        <label for="msg">What are you trying to get more of?</label>
+        <textarea id="msg" name="message" rows="4" placeholder="Bookings, foot traffic, online orders…"></textarea>
+      </div>
+      <p class="form-error" role="alert" hidden data-form-error>Please add your name and a valid email.</p>
+      <p class="form-success" role="status" hidden data-form-success>Got it. We reply within one working day.</p>
+      <button type="submit" class="btn btn-ghost">Send</button>
+    </form>
+  </div>
+</section>
+
+<script>
+  // Lightweight client validation. The real endpoint is wired in the next round.
+  const form = document.querySelector<HTMLFormElement>('.book-form');
+  if (form) {
+    const err = form.querySelector<HTMLElement>('[data-form-error]')!;
+    const ok = form.querySelector<HTMLElement>('[data-form-success]')!;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const valid = form.checkValidity();
+      err.hidden = valid;
+      ok.hidden = !valid;
+      form.querySelectorAll<HTMLInputElement>('input').forEach((i) => {
+        i.setAttribute('aria-invalid', String(!i.checkValidity()));
+      });
+      if (valid) form.reset();
+    });
+  }
+</script>
+
+<style>
+  .book {
+    background: var(--bg-2);
+    border-radius: var(--radius-lg);
+    margin-inline: var(--gutter);
+    padding-inline: 0;
+  }
+  .book::before { display: none; }
+  @media (max-width: 40rem) { .book { margin-inline: 0; border-radius: 0; } }
+
+  .book-grid { display: grid; gap: 3rem; }
+  @media (min-width: 60rem) {
+    .book-grid { grid-template-columns: 6fr 5fr; gap: clamp(3rem, 8vw, 8rem); align-items: start; }
+  }
+  .book-copy { display: grid; gap: 1.5rem; }
+  .book-copy .display { font-size: var(--t-1); }
+  .book-cal { display: grid; gap: 0.75rem; justify-items: start; margin-top: 0.5rem; }
+  .book-note { font-size: var(--t-small); color: var(--ink-3); }
+
+  .book-form {
+    display: grid;
+    gap: 1.25rem;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--bg);
+  }
+  .form-intro { color: var(--ink-2); font-size: var(--t-small); }
+
+  .field { display: grid; gap: 0.5rem; }
+  .field label { font-size: var(--t-small); color: var(--ink-2); }
+  input, textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    transition: border-color 0.25s var(--ease-out), background-color 0.25s var(--ease-out);
+  }
+  input:hover, textarea:hover { border-color: var(--line-strong); }
+  input:focus-visible, textarea:focus-visible {
+    outline: none;
+    border-color: var(--brass);
+    background: var(--surface-2);
+  }
+  input[aria-invalid='true'] { border-color: #d9776b; }
+  textarea { resize: vertical; min-height: 6rem; }
+  ::placeholder { color: var(--ink-3); }
+
+  .form-error { color: #e9988e; font-size: var(--t-small); }
+  .form-success { color: var(--brass-2); font-size: var(--t-small); }
+  .book-form .btn { justify-self: start; }
+</style>

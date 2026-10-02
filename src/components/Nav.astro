@@ -1,0 +1,151 @@
+---
+const links = [
+  { href: '#offer', label: 'What you get' },
+  { href: '#process', label: 'How it works' },
+  { href: '#proof', label: 'Results' },
+  { href: '#pricing', label: 'Pricing' },
+];
+---
+
+<header class="nav" data-nav>
+  <div class="wrap nav-inner">
+    <a href="#top" class="wordmark" aria-label="LLWC home">
+      <span class="mark" aria-hidden="true"></span>
+      LLWC
+    </a>
+
+    <nav aria-label="Primary" class="nav-links" id="nav-menu">
+      <ul>
+        {links.map((l) => (
+          <li><a href={l.href}>{l.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="#book" class="btn btn-primary nav-cta">Book a call</a>
+      <button
+        class="burger"
+        type="button"
+        aria-controls="nav-menu"
+        aria-expanded="false"
+        aria-label="Open menu"
+        data-burger
+      >
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-nav]')!;
+  const burger = document.querySelector<HTMLButtonElement>('[data-burger]')!;
+
+  burger.addEventListener('click', () => {
+    const open = nav.classList.toggle('is-open');
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+
+  nav.querySelectorAll('.nav-links a').forEach((a) =>
+    a.addEventListener('click', () => {
+      nav.classList.remove('is-open');
+      burger.setAttribute('aria-expanded', 'false');
+    }),
+  );
+
+  const onScroll = () => {
+    const y = window.scrollY;
+    nav.classList.toggle('is-scrolled', y > 24);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    padding-block: 1rem;
+    transition: background-color 0.4s var(--ease-out), padding 0.4s var(--ease-out);
+  }
+  .nav.is-scrolled {
+    padding-block: 0.6rem;
+    background: rgb(15 14 12 / 0.72);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: 0 1px 0 var(--line);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.25rem;
+    letter-spacing: 0.02em;
+  }
+  .mark {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--brass);
+    box-shadow: 0 0 0 4px var(--brass-dim);
+  }
+
+  .nav-links ul { display: flex; gap: 2rem; }
+  .nav-links a {
+    font-size: var(--t-small);
+    color: var(--ink-2);
+    transition: color 0.25s var(--ease-out);
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  .nav-actions { display: flex; align-items: center; gap: 0.75rem; }
+  .nav-cta { padding-block: 0.75rem; }
+
+  .burger {
+    display: none;
+    width: 44px; height: 44px;
+    border: 0; background: none; cursor: pointer;
+    flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    border-radius: 50%;
+  }
+  .burger span {
+    width: 20px; height: 1.5px; background: var(--ink);
+    transition: transform 0.35s var(--ease-out);
+  }
+  .is-open .burger span:first-child { transform: translateY(3.75px) rotate(45deg); }
+  .is-open .burger span:last-child { transform: translateY(-3.75px) rotate(-45deg); }
+
+  @media (max-width: 56rem) {
+    .nav-links {
+      position: absolute;
+      inset: 100% 0 auto 0;
+      background: rgb(15 14 12 / 0.96);
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out), visibility 0s 0.3s;
+    }
+    .is-open .nav-links { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+    .nav-links ul { flex-direction: column; gap: 0; padding: 0.5rem var(--gutter) 1rem; }
+    .nav-links a { display: block; padding: 0.9rem 0; font-size: 1.125rem; border-bottom: 1px solid var(--line); }
+    .burger { display: flex; }
+  }
+  @media (max-width: 24rem) {
+    .nav-cta { display: none; }
+  }
+</style>

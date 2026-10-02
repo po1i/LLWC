@@ -1,0 +1,132 @@
+---
+const offers = [
+  {
+    kind: 'The service',
+    name: 'Managed Ads',
+    tagline: 'We run your social advertising end to end.',
+    price: 'From $1,500 / mo + ad spend',
+    includes: [
+      'Strategy, audiences and creative, done for you',
+      'Meta, Instagram and TikTok campaigns built and run',
+      'Weekly check-in in plain language, 15 minutes',
+      'Landing page tune-ups when the data says so',
+    ],
+    excludes: ['Ad spend (paid directly to the platforms)', 'Video production shoots'],
+    cta: 'Talk about Managed Ads',
+  },
+  {
+    kind: 'The software',
+    name: 'The Platform',
+    tagline: 'One calm dashboard for every campaign you run.',
+    price: 'From $49 / mo, cancel anytime',
+    includes: [
+      'All your ad accounts in one view',
+      'Budget pacing alerts before money is wasted',
+      'Creative library with what is winning, ranked',
+      'Weekly email summary your accountant will understand',
+    ],
+    excludes: ['Running the campaigns for you (see Managed Ads)'],
+    cta: 'Start on the Platform',
+  },
+];
+---
+
+<section class="section offer" id="offer" aria-labelledby="offer-title">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="label" data-reveal>What you are buying</p>
+        <h2 id="offer-title" class="display" data-reveal style="--i:1">
+          Two things. <em>Nothing hidden.</em>
+        </h2>
+      </div>
+      <p class="lede" data-reveal style="--i:2">
+        Most owners need one of these. Some need both. Either way, what is included, what is not,
+        and what it costs is written down before you pay a cent.
+      </p>
+    </div>
+
+    <div class="offer-grid">
+      {offers.map((o, i) => (
+        <article class="card" data-reveal style={`--i:${i + 1}`}>
+          <p class="label">{o.kind}</p>
+          <h3 class="display card-title">{o.name}</h3>
+          <p class="card-tag">{o.tagline}</p>
+          <p class="price">{o.price}</p>
+
+          <dl class="spec">
+            <dt>Included</dt>
+            {o.includes.map((x) => <dd class="yes">{x}</dd>)}
+            <dt>Not included</dt>
+            {o.excludes.map((x) => <dd class="no">{x}</dd>)}
+          </dl>
+
+          <a href="#book" class="link">{o.cta}</a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .offer-grid {
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  @media (min-width: 56rem) { .offer-grid { grid-template-columns: 1fr 1fr; } }
+
+  .card {
+    background: var(--surface);
+    padding: clamp(1.5rem, 4vw, 3rem);
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    transition: background-color 0.4s var(--ease-out);
+  }
+  .card:hover { background: var(--surface-2); }
+
+  .card-title { font-size: var(--t-2); margin-top: 0.5rem; }
+  .card-tag { color: var(--ink-2); }
+  .price {
+    font-family: var(--font-mono);
+    font-size: var(--t-small);
+    color: var(--brass);
+    padding: 0.6rem 0;
+    border-block: 1px solid var(--line);
+  }
+
+  .spec { display: grid; gap: 0.5rem; margin-block: 0.5rem 1rem; }
+  .spec dt {
+    font-family: var(--font-mono);
+    font-size: var(--t-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-top: 0.75rem;
+  }
+  .spec dd {
+    display: grid;
+    grid-template-columns: 1rem 1fr;
+    gap: 0.75rem;
+    font-size: var(--t-small);
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .spec dd::before {
+    content: '';
+    width: 1rem; height: 1rem;
+    margin-top: 0.15rem;
+    border-radius: 50%;
+    background: var(--brass-dim);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.5l2.5 2.5 4.5-5' fill='none' stroke='%23c9a66b' stroke-width='1.5'/%3E%3C/svg%3E");
+  }
+  .spec dd.no { color: var(--ink-3); }
+  .spec dd.no::before {
+    background: rgb(237 232 223 / 0.06);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M5 8h6' fill='none' stroke='%23ede8df' stroke-opacity='.5' stroke-width='1.5'/%3E%3C/svg%3E");
+  }
+</style>

@@ -1,0 +1,97 @@
+---
+const steps = [
+  {
+    title: 'A 20-minute call, then a one-page plan.',
+    body: 'We ask about your customers, your margins and your capacity. You get a written plan: audiences, budget, what we expect to happen, and when.',
+  },
+  {
+    title: 'We build and launch inside two weeks.',
+    body: 'Creative, copy, tracking and landing pages, built by us and approved by you in one review. You never touch an ad manager.',
+  },
+  {
+    title: 'You watch the numbers that matter.',
+    body: 'Cost per lead, booked jobs, revenue. On the Platform dashboard, in a weekly email, and in a 15-minute call. We cut what fails and scale what works.',
+  },
+];
+---
+
+<section class="section process" id="process" aria-labelledby="process-title">
+  <div class="wrap process-grid">
+    <div class="process-sticky">
+      <p class="label" data-reveal>How it works</p>
+      <h2 id="process-title" class="display" data-reveal style="--i:1">
+        Three steps.<br /><em>No homework.</em>
+      </h2>
+      <p class="step-counter" aria-hidden="true">
+        <span data-step-current>01</span><span class="of">/ 03</span>
+      </p>
+    </div>
+
+    <ol class="steps">
+      {steps.map((s, i) => (
+        <li class="step" data-step={String(i + 1).padStart(2, '0')} data-reveal>
+          <span class="step-num" aria-hidden="true">0{i + 1}</span>
+          <h3 class="display step-title">{s.title}</h3>
+          <p class="lede">{s.body}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<script>
+  // Keep the sticky counter in sync with the step closest to the viewport centre.
+  const counter = document.querySelector<HTMLElement>('[data-step-current]');
+  const steps = document.querySelectorAll<HTMLElement>('[data-step]');
+  if (counter && steps.length && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) counter.textContent = (e.target as HTMLElement).dataset.step ?? '01';
+        }
+      },
+      { rootMargin: '-45% 0px -45% 0px' },
+    );
+    steps.forEach((s) => io.observe(s));
+  }
+</script>
+
+<style>
+  .process-grid { display: grid; gap: 3rem; }
+  @media (min-width: 56rem) {
+    .process-grid { grid-template-columns: 5fr 7fr; gap: clamp(3rem, 8vw, 8rem); }
+    .process-sticky { position: sticky; top: 7rem; align-self: start; }
+  }
+
+  .process-sticky .display { font-size: var(--t-1); margin-top: 1.25rem; }
+
+  .step-counter {
+    margin-top: 2rem;
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(3rem, 6vw, 5rem);
+    line-height: 1;
+    color: var(--brass);
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .step-counter .of { font-size: 1rem; color: var(--ink-3); font-family: var(--font-mono); }
+  @media (max-width: 56rem) { .step-counter { display: none; } }
+
+  .steps { display: grid; }
+  .step {
+    display: grid;
+    gap: 1rem;
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--line);
+  }
+  .step:last-child { border-bottom: 1px solid var(--line); }
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: var(--t-label);
+    letter-spacing: 0.14em;
+    color: var(--brass);
+  }
+  .step-title { font-size: var(--t-2); max-width: 20ch; }
+</style>
