@@ -1,18 +1,7 @@
 ---
-const steps = [
-  {
-    title: 'A 20-minute call, then a one-page plan.',
-    body: 'We ask about your customers, your margins and your capacity. You get a written plan: audiences, budget, what we expect to happen, and when.',
-  },
-  {
-    title: 'We build and launch inside two weeks.',
-    body: 'Creative, copy, tracking and landing pages, built by us and approved by you in one review. You never touch an ad manager.',
-  },
-  {
-    title: 'You watch the numbers that matter.',
-    body: 'Cost per lead, booked jobs, revenue. On the Platform dashboard, in a weekly email, and in a 15-minute call. We cut what fails and scale what works.',
-  },
-];
+import Tbd from './Tbd.astro';
+import { site } from '../data/site';
+const credit = site.terms.deadlineCredit;
 ---
 
 <section class="section process" id="process" aria-labelledby="process-title">
@@ -28,13 +17,37 @@ const steps = [
     </div>
 
     <ol class="steps">
-      {steps.map((s, i) => (
-        <li class="step" data-step={String(i + 1).padStart(2, '0')} data-reveal>
-          <span class="step-num" aria-hidden="true">0{i + 1}</span>
-          <h3 class="display step-title">{s.title}</h3>
-          <p class="lede">{s.body}</p>
-        </li>
-      ))}
+      <li class="step" data-step="01" data-reveal>
+        <span class="step-num" aria-hidden="true">01</span>
+        <h3 class="display step-title">A 20-minute call, then a written plan within 2 business days.</h3>
+        <p class="lede">
+          I ask about your treatments, your margins and how many consults you can take. You get a
+          written plan: audiences, budget, what I expect to happen, and when.
+        </p>
+      </li>
+
+      <li class="step" data-step="02" data-reveal>
+        <span class="step-num" aria-hidden="true">02</span>
+        <h3 class="display step-title">Built and live within two weeks.</h3>
+        <p class="lede">
+          Ads, copy, landing page and tracking, built by me and approved by you in one review. You
+          never touch an ad manager.
+        </p>
+        {credit === null ? (
+          <p class="step-note"><Tbd label="Missed-deadline credit: exact wording from the agreement, or remove" /></p>
+        ) : credit !== '' ? (
+          <p class="step-note">{credit}</p>
+        ) : null}
+      </li>
+
+      <li class="step" data-step="03" data-reveal>
+        <span class="step-num" aria-hidden="true">03</span>
+        <h3 class="display step-title">You see the numbers that matter.</h3>
+        <p class="lede">
+          Leads, cost per lead and booked consults, in a weekly email and a monthly 20-minute call.
+          Revenue too, if you choose to share it. I cut what fails and scale what works.
+        </p>
+      </li>
     </ol>
   </div>
 </section>
@@ -93,5 +106,7 @@ const steps = [
     letter-spacing: 0.14em;
     color: var(--brass);
   }
-  .step-title { font-size: var(--t-2); max-width: 20ch; }
+  .step-title { font-size: var(--t-2); max-width: 22ch; }
+  .step-note { font-size: var(--t-small); color: var(--ink-2); }
+  .step-note :global(.tbd) { white-space: normal; }
 </style>

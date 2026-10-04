@@ -1,22 +1,28 @@
 ---
+import Tbd from './Tbd.astro';
+import { site } from '../data/site';
 const year = new Date().getFullYear();
 ---
 
 <footer class="footer">
   <div class="wrap footer-inner">
     <div>
-      <p class="footer-mark">LLWC</p>
-      <p class="footer-tag">Ads that pay for themselves. Software that runs them.</p>
+      <p class="footer-mark">{site.brand}</p>
+      <p class="footer-tag">
+        Facebook and Instagram ads, landing pages and tracking for Boston-area med spas.
+      </p>
     </div>
     <nav aria-label="Footer">
       <ul>
         <li><a href="#offer">What you get</a></li>
         <li><a href="#pricing">Pricing</a></li>
         <li><a href="#faq">FAQ</a></li>
-        <li><a href="mailto:hello@example.com">hello@example.com</a></li>
+        <li>
+          {site.email ? <a href={`mailto:${site.email}`}>{site.email}</a> : <Tbd label="email address" />}
+        </li>
       </ul>
     </nav>
-    <p class="footer-legal">© {year} LLWC. All rights reserved.</p>
+    <p class="footer-legal">© {year} {site.legalName} All rights reserved.</p>
   </div>
 </footer>
 
@@ -28,8 +34,8 @@ const year = new Date().getFullYear();
     .footer-legal { grid-column: 1 / -1; }
   }
   .footer-mark { font-family: var(--font-display); font-weight: 500; font-size: 1.25rem; }
-  .footer-tag { color: var(--ink-3); font-size: var(--t-small); margin-top: 0.4rem; }
-  .footer nav ul { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+  .footer-tag { color: var(--ink-3); font-size: var(--t-small); margin-top: 0.4rem; max-width: 40ch; }
+  .footer nav ul { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.5rem; }
   .footer nav a { font-size: var(--t-small); color: var(--ink-2); transition: color 0.25s var(--ease-out); }
   .footer nav a:hover { color: var(--brass); }
   .footer-legal { font-family: var(--font-mono); font-size: var(--t-label); color: var(--ink-3); letter-spacing: 0.06em; }

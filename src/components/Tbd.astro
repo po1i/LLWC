@@ -1,0 +1,21 @@
+---
+// Visible placeholder for content that must be supplied before launch.
+interface Props { label: string }
+const { label } = Astro.props;
+---
+<mark class="tbd" title="Placeholder: replace before launch">[{label}]</mark>
+
+<style>
+  .tbd {
+    background: none;
+    color: var(--brass-2);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    font-style: normal;
+    letter-spacing: 0;
+    padding: 0.05em 0.35em;
+    border: 1px dashed rgb(201 166 107 / 0.6);
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+</style>

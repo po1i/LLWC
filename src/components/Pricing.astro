@@ -1,31 +1,37 @@
 ---
+import Tbd from './Tbd.astro';
+import { site, usd } from '../data/site';
+const { price, terms } = site;
+
 const tiers = [
   {
-    name: 'Platform',
-    price: '$49',
-    per: 'per month',
-    blurb: 'Run your own ads with the dashboard, alerts and weekly summary.',
-    features: ['Unlimited ad accounts', 'Budget pacing alerts', 'Weekly plain-language email', 'Email support, same day'],
-    cta: 'Start free for 14 days',
-    featured: false,
+    name: 'Growth',
+    price: usd(price.growth),
+    per: `per month + ad spend (min ${usd(price.adSpendMin)}, paid to Meta)`,
+    blurb: 'Ads, landing page and tracking, set up and run for you.',
+    features: [
+      `Booking-ready landing page, yours after ${price.ownershipPayments} payments`,
+      'Facebook and Instagram campaigns, built and run',
+      '8–12 new ad creatives a month',
+      'Review requests in your booking software',
+      'Weekly email and monthly 20-minute call',
+    ],
+    cta: 'Book a call',
+    founding: false,
   },
   {
-    name: 'Managed',
-    price: '$1,500',
-    per: 'per month + ad spend',
-    blurb: 'We run everything. You read a short email once a week.',
-    features: ['Everything in Platform', 'Strategy, creative and copy', 'Campaigns built and optimised', '15-minute weekly call', 'Landing page tune-ups'],
-    cta: 'Book a call',
-    featured: true,
-  },
-  {
-    name: 'Managed Plus',
-    price: '$3,500',
-    per: 'per month + ad spend',
-    blurb: 'For multi-location or multi-brand owners who need more hands.',
-    features: ['Everything in Managed', 'Up to 3 brands or locations', 'Monthly creative refresh', 'Quarterly strategy review', 'Priority support'],
-    cta: 'Book a call',
-    featured: false,
+    name: 'Founding',
+    price: usd(price.founding),
+    per: `per month for ${price.foundingMonths} months, then ${usd(price.growth)}`,
+    blurb: 'The full Growth plan at a lower rate for the first three med spas.',
+    features: [
+      'Everything in Growth, same scope',
+      `${usd(price.founding)} a month for your first ${price.foundingMonths} months`,
+      'In exchange: a case study and a testimonial',
+      'And permission to use your spa’s name',
+    ],
+    cta: 'Ask about a founding spot',
+    founding: true,
   },
 ];
 ---
@@ -40,15 +46,16 @@ const tiers = [
         </h2>
       </div>
       <p class="lede" data-reveal style="--i:2">
-        Agencies that charge a cut of your ad spend are paid to spend more. We are paid to make it
-        work. Month to month, no lock-in.
+        Agencies that charge a cut of your ad spend are paid to spend more. I am paid to make it
+        work. {terms.minimumMonths}-month minimum, then month to month with
+        {terms.noticePeriod ?? <Tbd label="notice period" />} written notice.
       </p>
     </div>
 
     <div class="tiers">
       {tiers.map((t, i) => (
-        <article class:list={['tier', { featured: t.featured }]} data-reveal style={`--i:${i + 1}`}>
-          {t.featured && <p class="tier-flag">Most owners choose this</p>}
+        <article class:list={['tier', { founding: t.founding }]} data-reveal style={`--i:${i + 1}`}>
+          {t.founding && <p class="tier-flag">{price.foundingSpots} spots</p>}
           <h3 class="tier-name">{t.name}</h3>
           <p class="tier-price">
             <span class="display">{t.price}</span>
@@ -58,7 +65,7 @@ const tiers = [
           <ul class="tier-features">
             {t.features.map((f) => <li>{f}</li>)}
           </ul>
-          <a href="#book" class:list={['btn', t.featured ? 'btn-primary' : 'btn-ghost']}>{t.cta}</a>
+          <a href="#book" class:list={['btn', t.founding ? 'btn-primary' : 'btn-ghost']}>{t.cta}</a>
         </article>
       ))}
     </div>
@@ -66,23 +73,23 @@ const tiers = [
 </section>
 
 <style>
-  .tiers { display: grid; gap: 1rem; }
-  @media (min-width: 60rem) { .tiers { grid-template-columns: repeat(3, 1fr); align-items: stretch; } }
+  .tiers { display: grid; gap: 1.5rem; }
+  @media (min-width: 52rem) { .tiers { grid-template-columns: repeat(2, 1fr); align-items: stretch; } }
 
   .tier {
     position: relative;
     display: grid;
     gap: 1.25rem;
     align-content: start;
-    padding: clamp(1.5rem, 3vw, 2.25rem);
+    padding: clamp(1.5rem, 3vw, 2.5rem);
     border: 1px solid var(--line);
     border-radius: var(--radius-lg);
     background: var(--bg-2);
-    transition: border-color 0.4s var(--ease-out), transform 0.5s var(--ease-out);
+    transition: border-color 0.4s var(--ease-out);
   }
   .tier:hover { border-color: var(--line-strong); }
-  .tier.featured { background: var(--surface); border-color: rgb(201 166 107 / 0.45); }
-  @media (min-width: 60rem) { .tier.featured { transform: translateY(-0.5rem); } }
+  .tier.founding { background: var(--surface); border-color: rgb(201 166 107 / 0.45); }
+  .tier.founding:hover { border-color: var(--brass); }
 
   .tier-flag {
     position: absolute;
@@ -98,9 +105,9 @@ const tiers = [
   }
 
   .tier-name { font-size: var(--t-small); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2); }
-  .tier-price { display: grid; gap: 0.25rem; }
+  .tier-price { display: grid; gap: 0.35rem; }
   .tier-price .display { font-size: var(--t-1); }
-  .tier-per { font-family: var(--font-mono); font-size: var(--t-label); color: var(--ink-3); letter-spacing: 0.06em; }
+  .tier-per { font-family: var(--font-mono); font-size: var(--t-label); color: var(--ink-3); letter-spacing: 0.04em; line-height: 1.5; }
   .tier-blurb { color: var(--ink-2); font-size: var(--t-small); line-height: 1.5; }
 
   .tier-features {
@@ -111,8 +118,8 @@ const tiers = [
     font-size: var(--t-small);
     color: var(--ink-2);
   }
-  .tier-features li { display: grid; grid-template-columns: 0.75rem 1fr; gap: 0.75rem; align-items: baseline; }
+  .tier-features li { display: grid; grid-template-columns: 0.75rem 1fr; gap: 0.75rem; align-items: baseline; line-height: 1.5; }
   .tier-features li::before { content: ''; width: 0.4rem; height: 0.4rem; border-radius: 50%; background: var(--brass); }
 
-  .tier .btn { justify-content: center; margin-top: 0.5rem; }
+  .tier .btn { justify-content: center; margin-top: 0.5rem; white-space: normal; text-align: center; }
 </style>

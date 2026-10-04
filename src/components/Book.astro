@@ -1,8 +1,8 @@
 ---
-// Placeholder integrations. Swap CAL_URL for the real Cal.com link and
-// FORM_ENDPOINT for a Formspree (or similar) endpoint in the next round.
-const CAL_URL = 'https://cal.com/llwc/intro';
-const FORM_ENDPOINT = '#';
+import { site } from '../data/site';
+// Placeholder integrations, wired in a later round. Set both in src/data/site.ts.
+const CAL_URL = site.calUrl;
+const FORM_ENDPOINT = site.formEndpoint;
 ---
 
 <section class="section book" id="book" aria-labelledby="book-title">
@@ -10,15 +10,15 @@ const FORM_ENDPOINT = '#';
     <div class="book-copy">
       <p class="label" data-reveal>Book a call</p>
       <h2 id="book-title" class="display" data-reveal style="--i:1">
-        Twenty minutes.<br />You leave with <em>a plan.</em>
+        Twenty minutes.<br />Then <em>a written plan.</em>
       </h2>
       <p class="lede" data-reveal style="--i:2">
-        No pitch deck. We ask about your business, tell you honestly whether ads will work for
-        you, and if they will, send a one-page plan the same day.
+        No pitch deck. I ask about your spa, tell you honestly whether ads will work for you,
+        and if they will, send a written plan within 2 business days.
       </p>
       <div class="book-cal" data-reveal style="--i:3">
         <a href={CAL_URL} class="btn btn-primary" target="_blank" rel="noopener">Pick a time on the calendar</a>
-        <p class="book-note">Opens our calendar. Takes 30 seconds.</p>
+        <p class="book-note">Opens my calendar. Takes 30 seconds.</p>
       </div>
     </div>
 
@@ -34,10 +34,10 @@ const FORM_ENDPOINT = '#';
       </div>
       <div class="field">
         <label for="msg">What are you trying to get more of?</label>
-        <textarea id="msg" name="message" rows="4" placeholder="Bookings, foot traffic, online orders…"></textarea>
+        <textarea id="msg" name="message" rows="4" placeholder="More injectable consults, filling weekday slots…"></textarea>
       </div>
       <p class="form-error" role="alert" hidden data-form-error>Please add your name and a valid email.</p>
-      <p class="form-success" role="status" hidden data-form-success>Got it. We reply within one working day.</p>
+      <p class="form-success" role="status" hidden data-form-success>Got it. I reply within one business day.</p>
       <button type="submit" class="btn btn-ghost">Send</button>
     </form>
   </div>

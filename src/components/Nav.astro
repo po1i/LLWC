@@ -1,17 +1,19 @@
 ---
+import { site } from '../data/site';
+
 const links = [
   { href: '#offer', label: 'What you get' },
   { href: '#process', label: 'How it works' },
-  { href: '#proof', label: 'Results' },
+  { href: '#measure', label: 'How you’ll know' },
   { href: '#pricing', label: 'Pricing' },
 ];
 ---
 
 <header class="nav" data-nav>
   <div class="wrap nav-inner">
-    <a href="#top" class="wordmark" aria-label="LLWC home">
-      <span class="mark" aria-hidden="true"></span>
-      LLWC
+    <a href="#top" class="wordmark" aria-label={`${site.brand} home`}>
+      <span class="mark" aria-hidden="true"><span></span></span>
+      {site.brand}
     </a>
 
     <nav aria-label="Primary" class="nav-links" id="nav-menu">
@@ -42,23 +44,22 @@ const links = [
   const nav = document.querySelector<HTMLElement>('[data-nav]')!;
   const burger = document.querySelector<HTMLButtonElement>('[data-burger]')!;
 
-  burger.addEventListener('click', () => {
-    const open = nav.classList.toggle('is-open');
+  const setOpen = (open: boolean) => {
+    nav.classList.toggle('is-open', open);
     burger.setAttribute('aria-expanded', String(open));
     burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  };
+
+  burger.addEventListener('click', () => setOpen(!nav.classList.contains('is-open')));
+  nav.querySelectorAll('.nav-links a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+      setOpen(false);
+      burger.focus();
+    }
   });
 
-  nav.querySelectorAll('.nav-links a').forEach((a) =>
-    a.addEventListener('click', () => {
-      nav.classList.remove('is-open');
-      burger.setAttribute('aria-expanded', 'false');
-    }),
-  );
-
-  const onScroll = () => {
-    const y = window.scrollY;
-    nav.classList.toggle('is-scrolled', y > 24);
-  };
+  const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 24);
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 </script>
@@ -89,18 +90,36 @@ const links = [
   .wordmark {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.65rem;
     font-family: var(--font-display);
     font-weight: 500;
     font-size: 1.25rem;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
   }
+
+  /* A spirit-level vial: the bubble settles to centre on hover. */
   .mark {
-    width: 10px; height: 10px;
+    position: relative;
+    width: 26px;
+    height: 12px;
+    border: 1.5px solid var(--brass);
+    border-radius: 999px;
+  }
+  .mark span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
     border-radius: 50%;
     background: var(--brass);
-    box-shadow: 0 0 0 4px var(--brass-dim);
+    transform: translateX(-5px);
+    transition: transform 0.9s var(--ease-out);
   }
+  .wordmark:hover .mark span,
+  .wordmark:focus-visible .mark span { transform: none; }
 
   .nav-links ul { display: flex; gap: 2rem; }
   .nav-links a {
@@ -147,5 +166,8 @@ const links = [
   }
   @media (max-width: 24rem) {
     .nav-cta { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mark span, .burger span { transition: none; }
   }
 </style>

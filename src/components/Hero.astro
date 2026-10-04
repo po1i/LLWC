@@ -1,30 +1,44 @@
 ---
+import { site } from '../data/site';
+
 const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>`;
+const { founder } = site;
+const photoSrc = founder.photo ? `${import.meta.env.BASE_URL}${founder.photo}` : null;
 ---
 
 <section class="hero" id="top">
   <div class="hero-glow" aria-hidden="true"></div>
   <div class="wrap hero-inner">
-    <p class="label" data-reveal>Managed ads · Lightweight software</p>
+    <p class="label" data-reveal>Facebook &amp; Instagram ads for med spas</p>
     <h1 class="display hero-title" data-reveal style="--i:1">
-      Ads that pay for themselves.<br />
-      Software that <em>runs them.</em>
+      New patients for <em><span class="nowrap">Boston-area</span> <span class="nowrap">med spas.</span></em>
     </h1>
     <p class="lede hero-lede" data-reveal style="--i:2">
-      You did not start a business to babysit ad campaigns. We plan, build and run your
-      social advertising, and give you one calm dashboard to see what it is doing. No jargon,
-      no surprises on the invoice.
+      I set up and run three things for you: Meta ads, a booking-ready landing page, and
+      tracking that shows which ads turn into booked consults. You stay with your patients.
     </p>
     <div class="hero-actions" data-reveal style="--i:3">
       <a href="#book" class="btn btn-primary">Book a 20-minute call <Fragment set:html={arrow} /></a>
       <a href="#offer" class="btn btn-ghost">See what you get</a>
     </div>
 
-    <ul class="logos" aria-label="Trusted by" data-reveal style="--i:4">
-      {['Northline Dental', 'Hollow Oak Co.', 'Vane & Sons', 'Marrow Fitness', 'Saltbox Café'].map((n) => (
-        <li>{n}</li>
-      ))}
-    </ul>
+    <div class="founder" data-reveal style="--i:4">
+      {photoSrc ? (
+        <img class="founder-photo" src={photoSrc} alt={`${founder.name}, ${founder.role} of ${site.legalName}`} width="56" height="56" loading="eager" decoding="async" />
+      ) : (
+        <div class="founder-photo founder-photo--tbd" role="img" aria-label={`Placeholder for a photo of ${founder.name}`} title="Placeholder: founder photo">
+          <span aria-hidden="true">{founder.name.charAt(0)}</span>
+        </div>
+      )}
+      <p class="founder-text">
+        <strong>{founder.name}</strong>
+        <span>{founder.role}, {site.legalName}</span>
+      </p>
+      <p class="founder-city">
+        <span class="pin" aria-hidden="true"></span>
+        Based in {founder.city}
+      </p>
+    </div>
   </div>
 </section>
 
@@ -34,11 +48,11 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
     min-height: 100svh;
     display: grid;
     align-items: end;
-    padding-block: clamp(8rem, 18vh, 12rem) clamp(3rem, 8vh, 6rem);
+    padding-block: clamp(7rem, 15vh, 10rem) clamp(2rem, 5vh, 4rem);
     overflow: hidden;
   }
 
-  /* Placeholder for the WebGL silk shader (next round). */
+  /* Placeholder for the WebGL hero shader (later round). */
   .hero-glow {
     position: absolute;
     inset: -20% -10% auto -10%;
@@ -56,22 +70,60 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
     font-size: var(--t-hero);
     max-width: 14ch;
   }
+  .nowrap { white-space: nowrap; }
 
   .hero-lede { font-size: var(--t-3); line-height: 1.5; max-width: 46ch; }
 
   .hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
 
-  .logos {
+  .founder {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem 2.5rem;
-    margin-top: clamp(2rem, 6vh, 4rem);
+    align-items: center;
+    gap: 0.75rem 1rem;
+    margin-top: clamp(1.5rem, 4vh, 3rem);
     padding-top: 1.5rem;
     border-top: 1px solid var(--line);
+  }
+  .founder-photo {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: none;
+    box-shadow: 0 0 0 1px var(--line-strong);
+  }
+  .founder-photo--tbd {
+    display: grid;
+    place-items: center;
+    background: var(--surface-2);
+    border: 1px dashed rgb(201 166 107 / 0.6);
+    box-shadow: none;
     font-family: var(--font-display);
-    font-weight: 400;
-    font-size: 1rem;
-    color: var(--ink-3);
-    letter-spacing: 0.01em;
+    font-size: 1.5rem;
+    color: var(--brass);
+  }
+  .founder-text { display: grid; line-height: 1.35; }
+  .founder-text strong { font-weight: 500; }
+  .founder-text span { color: var(--ink-3); font-size: var(--t-small); }
+
+  .founder-city {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: var(--t-label);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .pin {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--brass);
+    box-shadow: 0 0 0 4px var(--brass-dim);
+  }
+  @media (max-width: 30rem) {
+    .founder-city { margin-left: 0; flex-basis: 100%; }
   }
 </style>

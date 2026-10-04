@@ -1,0 +1,188 @@
+---
+import Tbd from './Tbd.astro';
+
+const metrics = [
+  {
+    name: 'Leads',
+    body: 'Every form, call and message that comes from an ad. Counted as it arrives, not estimated.',
+  },
+  {
+    name: 'Cost per lead',
+    body: 'Ad spend divided by leads. The number that decides whether an ad stays or goes.',
+  },
+  {
+    name: 'Booked consults',
+    body: 'Leads that turn into a consult on your calendar, counted from your booking software.',
+  },
+];
+
+// Spec ads: drop images into /public/spec/ and set `image` (e.g. 'spec/ad-1.jpg').
+const specAds = [
+  { concept: 'First-visit consult offer', image: null as string | null },
+  { concept: 'Treatment explainer', image: null as string | null },
+  { concept: 'Weekday appointment slots', image: null as string | null },
+];
+const base = import.meta.env.BASE_URL;
+---
+
+<section class="section measure" id="measure" aria-labelledby="measure-title">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="label" data-reveal>How you’ll know it’s working</p>
+        <h2 id="measure-title" class="display" data-reveal style="--i:1">
+          Three numbers. <em>Every week.</em>
+        </h2>
+      </div>
+      <p class="lede" data-reveal style="--i:2">
+        No vanity metrics and no 30-page report. These three show up in your inbox every week,
+        and on our monthly call we decide what to change.
+      </p>
+    </div>
+
+    <ol class="metrics">
+      {metrics.map((m, i) => (
+        <li class="metric" data-reveal style={`--i:${i + 1}`}>
+          <span class="metric-num" aria-hidden="true">0{i + 1}</span>
+          <h3 class="display metric-name">{m.name}</h3>
+          <p>{m.body}</p>
+        </li>
+      ))}
+    </ol>
+
+    <div class="spec-head" data-reveal>
+      <h3 class="spec-title">Sample ads</h3>
+      <p class="concept-badge">Concept work, not a client</p>
+    </div>
+
+    <ul class="ads">
+      {specAds.map((ad, i) => (
+        <li class="ad" data-reveal style={`--i:${i + 1}`}>
+          <figure>
+            <div class="ad-top" aria-hidden="true">
+              <span class="ad-avatar"></span>
+              <span class="ad-acct">Your Med Spa<small>Sponsored</small></span>
+            </div>
+            {ad.image ? (
+              <img
+                class="ad-media"
+                src={`${base}${ad.image}`}
+                alt={`Spec ad concept: ${ad.concept}`}
+                width="800"
+                height="1000"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <div class="ad-media ad-media--tbd" role="img" aria-label={`Placeholder for spec ad: ${ad.concept}`}>
+                <span class="ad-index" aria-hidden="true">0{i + 1}</span>
+                <Tbd label="spec ad image" />
+              </div>
+            )}
+            <figcaption>
+              <span class="ad-concept">{ad.concept}</span>
+              <span class="concept-badge concept-badge--sm">Concept work, not a client</span>
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+
+    <p class="measure-after" data-reveal>
+      <a href="#book" class="link">See if we are a fit</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .metrics {
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border-block: 1px solid var(--line);
+  }
+  @media (min-width: 48rem) { .metrics { grid-template-columns: repeat(3, 1fr); } }
+  .metric {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+    padding: clamp(1.5rem, 3vw, 2.5rem) 0;
+    background: var(--bg);
+  }
+  @media (min-width: 48rem) {
+    .metric { padding-inline: clamp(1.25rem, 3vw, 2.5rem); }
+    .metric:first-child { padding-left: 0; }
+    .metric:last-child { padding-right: 0; }
+  }
+  .metric-num { font-family: var(--font-mono); font-size: var(--t-label); letter-spacing: 0.14em; color: var(--brass); }
+  .metric-name { font-size: var(--t-2); }
+  .metric p { color: var(--ink-2); font-size: var(--t-small); line-height: 1.6; max-width: 34ch; }
+
+  .spec-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    margin-top: clamp(3.5rem, 7vw, 5.5rem);
+    margin-bottom: 1.5rem;
+  }
+  .spec-title { font-family: var(--font-display); font-weight: 400; font-size: var(--t-3); }
+
+  .concept-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: var(--t-label);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .concept-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--brass); }
+  .concept-badge--sm { padding: 0.25rem 0.55rem; font-size: 0.65rem; }
+
+  .ads {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  }
+  .ad figure {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .ad-top { display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 0.9rem; }
+  .ad-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--surface-2); box-shadow: 0 0 0 1px var(--line-strong); }
+  .ad-acct { display: grid; font-size: 0.8rem; font-weight: 500; line-height: 1.25; }
+  .ad-acct small { font-weight: 400; color: var(--ink-3); font-size: 0.7rem; }
+
+  .ad-media { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+  .ad-media--tbd {
+    position: relative;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(70% 60% at 30% 25%, rgb(201 166 107 / 0.14), transparent 70%),
+      var(--bg-2);
+    border-block: 1px dashed rgb(201 166 107 / 0.35);
+  }
+  .ad-index {
+    position: absolute;
+    left: 1rem; bottom: 0.5rem;
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 4rem;
+    line-height: 1;
+    color: rgb(237 232 223 / 0.08);
+  }
+
+  .ad figcaption { display: grid; gap: 0.6rem; justify-items: start; padding: 0.9rem; }
+  .ad-concept { font-size: var(--t-small); color: var(--ink); }
+
+  .measure-after { margin-top: 2.5rem; }
+</style>

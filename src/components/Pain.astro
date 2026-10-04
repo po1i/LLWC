@@ -1,8 +1,10 @@
 ---
+import { site } from '../data/site';
+
 const lines = [
-  'You have boosted a post, watched the money go, and learned nothing.',
-  'Every agency promised a strategy. You got a monthly PDF and a bigger invoice.',
-  'You want customers, not another dashboard you have to learn.',
+  'You boosted a post for injectables week. It got likes, not consults.',
+  'Saturdays book themselves. Tuesday afternoons sit empty.',
+  'An agency sent a monthly report. You still can’t tell which ad booked which patient.',
 ];
 ---
 
@@ -18,7 +20,8 @@ const lines = [
       ))}
     </ol>
     <p class="pain-after lede" data-reveal>
-      We built LLWC for owners who are tired of the above. Here is exactly what you are buying.
+      {site.brand} is for med spa owners who are done with all three. Here is exactly what you
+      are buying.
       <a href="#offer" class="link">Read on</a>
     </p>
   </div>
@@ -28,7 +31,7 @@ const lines = [
   .pain-list { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); margin-top: 2.5rem; }
   .pain-list li {
     font-size: var(--t-1);
-    max-width: 22ch;
+    max-width: 24ch;
     display: grid;
     grid-template-columns: auto 1fr;
     gap: clamp(1rem, 3vw, 2rem);
