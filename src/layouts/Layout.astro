@@ -49,6 +49,9 @@ const {
     <Footer />
 
     <script>
+      import '../scripts/smooth-scroll';
+    </script>
+    <script>
       // Scroll reveals. Elements with [data-reveal] get .is-in once they enter the viewport.
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');

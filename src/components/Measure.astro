@@ -16,11 +16,24 @@ const metrics = [
   },
 ];
 
-// Spec ads: drop images into /public/spec/ and set `image` (e.g. 'spec/ad-1.jpg').
+// Spec ads live in /public/spec/ as 1080×1350 plus a 540-wide copy (`-540`).
+// Set `image` to null to show a placeholder frame instead.
 const specAds = [
-  { concept: 'First-visit consult offer', image: null as string | null },
-  { concept: 'Treatment explainer', image: null as string | null },
-  { concept: 'Weekday appointment slots', image: null as string | null },
+  {
+    concept: 'First-visit consult offer',
+    image: 'spec/ad-1' as string | null,
+    alt: 'Concept ad: “Your first injectables appointment, start to finish.” Three steps: a 20-minute consult with a licensed injector, a plan and written price before anything starts, and a follow-up check two weeks later. Button: Complimentary consult.',
+  },
+  {
+    concept: 'Treatment explainer',
+    image: 'spec/ad-2' as string | null,
+    alt: 'Concept ad: “Laser hair removal, explained.” Answers three questions: how many visits, whether timing matters, and what the first step is, a free consult and patch test.',
+  },
+  {
+    concept: 'Weekday appointment slots',
+    image: 'spec/ad-3' as string | null,
+    alt: 'Concept ad: “Skip the Saturday rush.” Weekday afternoon consult times laid out Monday to Friday, with the line “Request a weekday time. We’ll text you to confirm.”',
+  },
 ];
 const base = import.meta.env.BASE_URL;
 ---
@@ -66,10 +79,12 @@ const base = import.meta.env.BASE_URL;
             {ad.image ? (
               <img
                 class="ad-media"
-                src={`${base}${ad.image}`}
-                alt={`Spec ad concept: ${ad.concept}`}
-                width="800"
-                height="1000"
+                src={`${base}${ad.image}-540.jpg`}
+                srcset={`${base}${ad.image}-540.jpg 540w, ${base}${ad.image}.jpg 1080w`}
+                sizes="(min-width: 64rem) 30vw, (min-width: 40rem) 45vw, 92vw"
+                alt={ad.alt}
+                width="1080"
+                height="1350"
                 loading="lazy"
                 decoding="async"
               />
@@ -161,7 +176,7 @@ const base = import.meta.env.BASE_URL;
   .ad-acct { display: grid; font-size: 0.8rem; font-weight: 500; line-height: 1.25; }
   .ad-acct small { font-weight: 400; color: var(--ink-3); font-size: 0.7rem; }
 
-  .ad-media { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+  .ad-media { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
   .ad-media--tbd {
     position: relative;
     display: grid;
