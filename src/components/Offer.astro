@@ -1,5 +1,6 @@
 ---
 import { site, usd } from '../data/site';
+import Btn from './Btn.astro';
 const { price } = site;
 
 const includes = [
@@ -52,7 +53,7 @@ const excludes = [
           </p>
         </aside>
 
-        <a href="#book" class="btn btn-primary card-cta">Book a call about Growth</a>
+        <Btn href="#book" label="Book a call about Growth" class="card-cta" />
       </div>
 
       <div class="card-spec">
@@ -128,7 +129,7 @@ const excludes = [
   .founding-price strong { font-weight: 600; color: var(--ink); }
   .founding-terms { font-size: var(--t-small); color: var(--ink-2); line-height: 1.5; }
 
-  .card-cta { justify-self: start; margin-top: 0.5rem; }
+  .card-main :global(.card-cta) { justify-self: start; margin-top: 0.5rem; }
 
   .spec { display: grid; gap: 0.6rem; }
   .spec dt {

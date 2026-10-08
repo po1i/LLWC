@@ -104,6 +104,9 @@ const { price, terms, founder } = site;
   }
   summary::-webkit-details-marker { display: none; }
   summary:hover { color: var(--brass-2); }
+  summary:hover .faq-icon,
+  summary:focus-visible .faq-icon { border-color: var(--brass); color: var(--brass-2); }
+  details[open] .faq-icon { background: var(--brass); border-color: var(--brass); color: var(--bg); }
   summary:focus-visible { outline-offset: -2px; }
 
   .faq-icon {
@@ -112,6 +115,7 @@ const { price, terms, founder } = site;
     width: 1.5rem; height: 1.5rem;
     border: 1px solid var(--line-strong);
     border-radius: 50%;
+    transition: border-color 0.3s var(--ease-out), background-color 0.4s var(--ease-out), color 0.3s var(--ease-out);
   }
   .faq-icon::before, .faq-icon::after {
     content: '';

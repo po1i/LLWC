@@ -1,0 +1,49 @@
+---
+// The one button for the whole site. Renders an <a> when given href, else a <button>.
+interface Props {
+  label: string;
+  href?: string;
+  variant?: 'primary' | 'ghost';
+  size?: 'md' | 'sm';
+  /** Arrow chip: 'right' for in-page, 'external' for links that open elsewhere, false for none. */
+  arrow?: 'right' | 'external' | false;
+  full?: boolean;
+  external?: boolean;
+  type?: 'button' | 'submit';
+  magnetic?: boolean;
+  class?: string;
+}
+const {
+  label,
+  href,
+  variant = 'primary',
+  size = 'md',
+  arrow = variant === 'primary' ? 'right' : false,
+  full = false,
+  external = false,
+  type = 'button',
+  magnetic = true,
+  class: extra,
+} = Astro.props;
+
+const classes = ['btn', `btn--${variant}`, size === 'sm' && 'btn--sm', full && 'btn--full', arrow && 'btn--chip', extra];
+const Tag = href ? 'a' : 'button';
+const attrs = href
+  ? { href, ...(external ? { target: '_blank', rel: 'noopener' } : {}) }
+  : { type };
+const path = arrow === 'external' ? 'M5 11 11 5M6 5h5v5' : 'M3 8h10M9 4l4 4-4 4';
+---
+
+<Tag class:list={classes} data-magnetic={magnetic ? '' : undefined} {...attrs}>
+  <span class="btn__fx" aria-hidden="true"></span>
+  <span class="btn__inner">
+    <span class="btn__label"><span class="btn__text">{label}</span></span>
+    {external && <span class="sr-only">(opens in a new tab)</span>}
+    {arrow && (
+      <span class:list={['btn__chip', arrow === 'external' && 'btn__chip--diag']} aria-hidden="true">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={path} /></svg>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={path} /></svg>
+      </span>
+    )}
+  </span>
+</Tag>

@@ -1,5 +1,6 @@
 ---
 import Tbd from './Tbd.astro';
+import Btn from './Btn.astro';
 import { site, usd } from '../data/site';
 const { price, terms } = site;
 
@@ -65,7 +66,7 @@ const tiers = [
           <ul class="tier-features">
             {t.features.map((f) => <li>{f}</li>)}
           </ul>
-          <a href="#book" class:list={['btn', t.founding ? 'btn-primary' : 'btn-ghost']}>{t.cta}</a>
+          <Btn href="#book" label={t.cta} variant={t.founding ? 'primary' : 'ghost'} full class="tier-cta" />
         </article>
       ))}
     </div>
@@ -121,5 +122,5 @@ const tiers = [
   .tier-features li { display: grid; grid-template-columns: 0.75rem 1fr; gap: 0.75rem; align-items: baseline; line-height: 1.5; }
   .tier-features li::before { content: ''; width: 0.4rem; height: 0.4rem; border-radius: 50%; background: var(--brass); }
 
-  .tier .btn { justify-content: center; margin-top: 0.5rem; white-space: normal; text-align: center; }
+  .tier :global(.tier-cta) { margin-top: 0.5rem; }
 </style>

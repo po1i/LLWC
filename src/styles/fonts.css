@@ -1,0 +1,59 @@
+/* Self-hosted fonts. Latin subset; Fraunces trimmed to the weight (300–500)
+   and softness (0–30) ranges the site uses. Files are hashed by the build. */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url('../assets/fonts/fraunces-roman.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Fraunces';
+  font-style: italic;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url('../assets/fonts/fraunces-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/geist.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/geist-mono.woff2') format('woff2');
+}
+
+/* Metric-matched fallbacks: while the real fonts load, the system font is
+   scaled to the same width and line box, so text does not reflow on swap.
+   Measured against Liberation Serif/Sans/Mono, which share metrics with
+   Times New Roman, Arial and Courier New. */
+@font-face {
+  font-family: 'Fraunces Fallback';
+  src: local('Times New Roman'), local('TimesNewRomanPSMT'), local('Liberation Serif');
+  size-adjust: 90.27%;
+  ascent-override: 108.34%;
+  descent-override: 28.25%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Geist Fallback';
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Helvetica');
+  size-adjust: 102.37%;
+  ascent-override: 98.17%;
+  descent-override: 28.82%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Geist Mono Fallback';
+  src: local('Courier New'), local('CourierNewPSMT'), local('Liberation Mono');
+  size-adjust: 99.98%;
+  ascent-override: 100.52%;
+  descent-override: 29.5%;
+  line-gap-override: 0%;
+}

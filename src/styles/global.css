@@ -1,5 +1,5 @@
 /* ───────────────────────────────────────────────
-   LLWC design tokens
+   Level Line design tokens
    ─────────────────────────────────────────────── */
 :root {
   color-scheme: dark;
@@ -19,9 +19,9 @@
   --brass-2: #e3c98f;
   --brass-dim: rgb(201 166 107 / 0.16);
 
-  --font-display: 'Fraunces', 'Iowan Old Style', 'Times New Roman', serif;
-  --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-display: 'Fraunces', 'Fraunces Fallback', 'Times New Roman', serif;
+  --font-sans: 'Geist', 'Geist Fallback', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback', ui-monospace, 'SF Mono', Menlo, monospace;
 
   /* fluid type */
   --t-hero: clamp(2.75rem, 1.6rem + 5.4vw, 6.75rem);
@@ -161,64 +161,223 @@ h1, h2, h3, h4 { font-weight: inherit; line-height: 1; }
   .section-head .lede { justify-self: end; max-width: 46ch; }
 }
 .section-head .display { font-size: var(--t-1); }
-@media (min-width: 56rem) {
-}
 
 /* ───────────────────────────────────────────────
-   Buttons & links
+   Buttons (markup comes from components/Btn.astro)
    ─────────────────────────────────────────────── */
 .btn {
+  --h: 3.25rem;
+  --pad: 1.5rem;
+  --chip: 2.25rem;
+  --mx: 0px;
+  --my: 0px;
+  --ix: 0px;
+  --iy: 0px;
+
+  position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.95rem 1.5rem;
+  justify-content: center;
+  min-height: var(--h);
+  padding: 0 var(--pad);
+  border: 0;
   border-radius: 999px;
-  border: 1px solid transparent;
+  background: none;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  translate: var(--mx) var(--my);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.btn--sm { --h: 2.75rem; --pad: 1.15rem; --chip: 1.85rem; font-size: 0.875rem; }
+.btn--full { display: flex; width: 100%; }
+.btn--chip { padding-right: calc((var(--h) - var(--chip)) / 2); }
+
+.btn__inner {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  translate: var(--ix) var(--iy);
+  transition: scale 0.35s var(--ease-out);
+}
+.btn:active .btn__inner { scale: 0.96; transition-duration: 0.12s; }
+
+/* Label roll: the text-shadow is a second copy one line below, so the
+   label rolls to it on hover without duplicating text for screen readers. */
+.btn__label {
+  display: block;
+  height: 1.5em;
+  line-height: 1.5em;
+  overflow: hidden;
+}
+.btn__text {
+  display: block;
+  text-shadow: 0 1.5em 0 currentColor;
+  transition: transform 0.65s var(--ease-out);
+}
+.btn:hover .btn__text,
+.btn:focus-visible .btn__text { transform: translateY(-1.5em); }
+
+/* Arrow chip: the arrow exits right while its twin enters from the left. */
+.btn__chip {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--chip);
+  height: var(--chip);
+  border-radius: 50%;
+  overflow: hidden;
+}
+.btn__chip svg {
+  grid-area: 1 / 1;
+  width: 0.95rem;
+  height: 0.95rem;
+  transition: transform 0.6s var(--ease-out);
+}
+.btn__chip svg:last-child { transform: translateX(-180%); }
+.btn:hover .btn__chip svg:first-child,
+.btn:focus-visible .btn__chip svg:first-child { transform: translateX(180%); }
+.btn:hover .btn__chip svg:last-child,
+.btn:focus-visible .btn__chip svg:last-child { transform: none; }
+.btn__chip--diag svg:last-child { transform: translate(-180%, 180%); }
+.btn:hover .btn__chip--diag svg:first-child,
+.btn:focus-visible .btn__chip--diag svg:first-child { transform: translate(180%, -180%); }
+
+/* Shared layers: base surface (::before), hover layer (.btn__fx), edge (::after). */
+.btn::before,
+.btn::after,
+.btn__fx {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.btn__fx { z-index: 1; overflow: hidden; }
+
+/* Primary: burnished brass with a lit top edge and a warm under-glow. */
+.btn--primary { color: #17120a; }
+.btn--primary::before {
+  z-index: 0;
+  background: linear-gradient(180deg, #dcbd84 0%, #c9a66b 48%, #b18d55 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 244 220 / 0.55),
+    inset 0 -1px 0 rgb(70 48 16 / 0.35),
+    0 1px 1px rgb(0 0 0 / 0.5),
+    0 10px 28px -10px rgb(201 166 107 / 0.55);
+}
+.btn--primary::after {
+  z-index: -1;
+  inset: -6px;
+  background: radial-gradient(60% 70% at 50% 60%, rgb(227 201 143 / 0.45), transparent 70%);
+  filter: blur(10px);
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-out);
+}
+.btn--primary:hover::after,
+.btn--primary:focus-visible::after { opacity: 1; }
+.btn--primary .btn__fx::before {
+  content: '';
+  position: absolute;
+  inset: -20% auto -20% 0;
+  width: 45%;
+  background: linear-gradient(100deg, transparent, rgb(255 248 230 / 0.55), transparent);
+  transform: translateX(-130%) skewX(-18deg);
+}
+.btn--primary:hover .btn__fx::before,
+.btn--primary:focus-visible .btn__fx::before {
+  transform: translateX(330%) skewX(-18deg);
+  transition: transform 0.9s var(--ease-out);
+}
+.btn--primary .btn__chip {
+  background: #15120d;
+  color: var(--brass-2);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 1px 0 rgb(255 244 220 / 0.35);
+}
+
+/* Ghost: smoked glass with a hairline edge that warms to brass. */
+.btn--ghost { color: var(--ink); }
+.btn--ghost::before {
+  z-index: 0;
+  background: linear-gradient(180deg, rgb(237 232 223 / 0.06), rgb(237 232 223 / 0.015));
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.btn--ghost::after {
+  z-index: 3;
+  padding: 1px;
+  background: linear-gradient(180deg, rgb(237 232 223 / 0.32), rgb(237 232 223 / 0.08));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.btn--ghost .btn__fx {
+  background: linear-gradient(180deg, rgb(201 166 107 / 0.16), rgb(201 166 107 / 0.06));
+  box-shadow: inset 0 0 0 1px rgb(201 166 107 / 0.7);
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  transition: transform 0.55s var(--ease-out);
+}
+.btn--ghost:hover .btn__fx,
+.btn--ghost:focus-visible .btn__fx { transform: scaleY(1); }
+.btn--ghost .btn__chip { background: rgb(237 232 223 / 0.08); color: var(--brass-2); }
+
+.btn:focus-visible { outline: none; }
+.btn:focus-visible .btn__fx { box-shadow: inset 0 0 0 1px rgb(201 166 107 / 0.7); }
+.btn:focus-visible::before { outline: 2px solid var(--brass); outline-offset: 4px; }
+.btn--primary:focus-visible::before { outline-color: var(--brass-2); }
+
+.btn[aria-disabled='true'],
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ───────────────────────────────────────────────
+   Text links
+   ─────────────────────────────────────────────── */
+.link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding-block: 0.35rem;
+  color: var(--brass-2);
   font-size: var(--t-small);
   font-weight: 500;
   letter-spacing: 0.01em;
-  line-height: 1;
-  cursor: pointer;
-  white-space: nowrap;
-  transition:
-    background-color 0.25s var(--ease-out),
-    border-color 0.25s var(--ease-out),
-    color 0.25s var(--ease-out),
-    transform 0.4s var(--ease-out);
-  will-change: transform;
 }
-.btn:hover { transform: translateY(-2px); }
-.btn:active { transform: translateY(0); transition-duration: 0.1s; }
-
-.btn-primary { background: var(--brass); color: var(--bg); }
-.btn-primary:hover { background: var(--brass-2); }
-
-.btn-ghost { border-color: var(--line-strong); color: var(--ink); }
-.btn-ghost:hover { border-color: var(--ink); background: rgb(237 232 223 / 0.04); }
-
-.btn svg { width: 1em; height: 1em; transition: transform 0.4s var(--ease-out); }
-.btn:hover svg { transform: translateX(3px); }
-
-.link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--brass);
-  font-size: var(--t-small);
-  font-weight: 500;
-  position: relative;
-}
+.link::before,
 .link::after {
   content: '';
   position: absolute;
-  left: 0; bottom: -3px;
-  width: 100%; height: 1px;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
   background: currentColor;
-  transform: scaleX(0.35);
-  transform-origin: left;
+}
+.link::before { opacity: 0.3; }
+.link::after {
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.6s var(--ease-out);
+}
+.link:hover::after,
+.link:focus-visible::after { transform: scaleX(1); transform-origin: left; }
+.link svg {
+  width: 0.9em;
+  height: 0.9em;
   transition: transform 0.5s var(--ease-out);
 }
-.link:hover::after { transform: scaleX(1); }
+.link:hover svg,
+.link:focus-visible svg { transform: translateX(4px); }
 
 /* ───────────────────────────────────────────────
    Reveal (IntersectionObserver adds .is-in)
@@ -235,6 +394,67 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
   [data-reveal] { opacity: 1; transform: none; transition: none; }
-  .btn, .btn svg, .link::after { transition: none; }
-  .btn:hover { transform: none; }
+  .btn *, .btn::before, .btn::after, .link::after, .link svg { transition: none !important; }
+  .btn:hover .btn__text, .btn:focus-visible .btn__text { transform: none; }
+  .btn__chip svg:first-child { transform: none !important; }
+  .btn__chip svg:last-child { display: none; }
+  .btn--primary .btn__fx::before { display: none; }
 }
+
+/* ───────────────────────────────────────────────
+   Custom cursor (scripts/cursor.ts adds .has-cursor)
+   ─────────────────────────────────────────────── */
+html.has-cursor,
+html.has-cursor * { cursor: none !important; }
+html.has-cursor :is(input:not([type='radio']):not([type='checkbox']), textarea, select) { cursor: text !important; }
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out);
+}
+.cursor-dot::before,
+.cursor-ring::before {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  transition: transform 0.45s var(--ease-out), background-color 0.3s var(--ease-out), border-color 0.3s var(--ease-out), opacity 0.3s var(--ease-out);
+}
+.cursor-dot::before {
+  width: 6px; height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--ink);
+}
+.cursor-ring::before {
+  width: 34px; height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1px solid rgb(201 166 107 / 0.55);
+}
+
+html.cursor-visible .cursor-dot,
+html.cursor-visible .cursor-ring { opacity: 1; }
+
+/* Links and toggles: the ring swells and warms. */
+html.cursor-link .cursor-ring::before {
+  transform: scale(1.3);
+  border-color: var(--brass);
+  background: rgb(201 166 107 / 0.1);
+}
+html.cursor-link .cursor-dot::before { transform: scale(0); }
+
+/* Buttons: the button itself answers (magnetic), so the ring steps back. */
+html.cursor-btn .cursor-ring::before { transform: scale(0.4); opacity: 0; }
+html.cursor-btn .cursor-dot::before { transform: scale(1.3); }
+html.cursor-btn-primary .cursor-dot::before { background: #15120d; }
+
+/* Text fields: hand back the native caret. */
+html.cursor-text .cursor-dot,
+html.cursor-text .cursor-ring { opacity: 0; }
+
+html.cursor-down .cursor-ring::before { transform: scale(0.8); }
+html.cursor-down.cursor-link .cursor-ring::before { transform: scale(1.1); }

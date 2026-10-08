@@ -6,7 +6,7 @@ privacy-safe tracking for Boston-area med spas.
 ## Stack
 
 - Astro 5, static output, vanilla CSS with custom properties
-- Fonts: Fraunces (display), Geist and Geist Mono (UI) via Google Fonts
+- Fonts: Fraunces (display), Geist and Geist Mono (UI), self-hosted
 - Deployed to GitHub Pages by `.github/workflows/deploy.yml`
 
 ## Run locally
@@ -24,6 +24,22 @@ npm run dev
 - **Smooth scroll** (`src/scripts/smooth-scroll.ts`): Lenis on mouse wheel and trackpad. Touch
   scrolling stays native. Turned off under reduced motion. In-page links move keyboard focus to
   their target.
+
+- **Cursor and magnetic buttons** (`src/scripts/cursor.ts`): a dot plus a trailing ring that
+  swells over links. Buttons lean toward the pointer. Mouse only, off for touch and reduced motion.
+
+## Buttons
+
+Every button is `src/components/Btn.astro`: `variant` (primary or ghost), `size` (md or sm),
+`arrow` (right, external or none), `full`, `external`, `type`. Styles live under "Buttons" in
+`src/styles/global.css`.
+
+## Fonts
+
+Self-hosted from `src/assets/fonts/`, latin subset only. Fraunces is trimmed to weights 300–500 and
+softness 0–30. The headline fonts and Geist are preloaded. Metric-matched fallbacks in
+`src/styles/fonts.css` keep text from shifting while fonts load. Fonts are licensed under the SIL
+Open Font License, so self-hosting is allowed.
 
 ## Spec ads
 

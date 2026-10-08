@@ -1,5 +1,6 @@
 ---
 import { site } from '../data/site';
+import Btn from './Btn.astro';
 // Placeholder integrations, wired in a later round. Set both in src/data/site.ts.
 const CAL_URL = site.calUrl;
 const FORM_ENDPOINT = site.formEndpoint;
@@ -17,7 +18,7 @@ const FORM_ENDPOINT = site.formEndpoint;
         and if they will, send a written plan within 2 business days.
       </p>
       <div class="book-cal" data-reveal style="--i:3">
-        <a href={CAL_URL} class="btn btn-primary" target="_blank" rel="noopener">Pick a time on the calendar</a>
+        <Btn href={CAL_URL} label="Pick a time on the calendar" arrow="external" external />
         <p class="book-note">Opens my calendar. Takes 30 seconds.</p>
       </div>
     </div>
@@ -38,7 +39,7 @@ const FORM_ENDPOINT = site.formEndpoint;
       </div>
       <p class="form-error" role="alert" hidden data-form-error>Please add your name and a valid email.</p>
       <p class="form-success" role="status" hidden data-form-success>Got it. I reply within one business day.</p>
-      <button type="submit" class="btn btn-ghost">Send</button>
+      <Btn type="submit" label="Send message" variant="ghost" arrow="right" class="form-submit" />
     </form>
   </div>
 </section>
@@ -92,20 +93,24 @@ const FORM_ENDPOINT = site.formEndpoint;
   .form-intro { color: var(--ink-2); font-size: var(--t-small); }
 
   .field { display: grid; gap: 0.5rem; }
-  .field label { font-size: var(--t-small); color: var(--ink-2); }
+  .field label { font-size: var(--t-small); color: var(--ink-2); transition: color 0.3s var(--ease-out); }
+  .field:focus-within label { color: var(--brass-2); }
   input, textarea {
     width: 100%;
-    padding: 0.85rem 1rem;
-    background: var(--surface);
+    padding: 0.9rem 1rem;
+    background: linear-gradient(180deg, rgb(0 0 0 / 0.18), transparent 60%), var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius);
-    transition: border-color 0.25s var(--ease-out), background-color 0.25s var(--ease-out);
+    box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.35), 0 0 0 0 rgb(201 166 107 / 0);
+    caret-color: var(--brass);
+    transition: border-color 0.3s var(--ease-out), background-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
   }
   input:hover, textarea:hover { border-color: var(--line-strong); }
-  input:focus-visible, textarea:focus-visible {
+  input:focus, textarea:focus {
     outline: none;
-    border-color: var(--brass);
-    background: var(--surface-2);
+    border-color: rgb(201 166 107 / 0.8);
+    background-color: var(--surface-2);
+    box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.35), 0 0 0 4px rgb(201 166 107 / 0.12);
   }
   input[aria-invalid='true'] { border-color: #d9776b; }
   textarea { resize: vertical; min-height: 6rem; }
@@ -113,5 +118,5 @@ const FORM_ENDPOINT = site.formEndpoint;
 
   .form-error { color: #e9988e; font-size: var(--t-small); }
   .form-success { color: var(--brass-2); font-size: var(--t-small); }
-  .book-form .btn { justify-self: start; }
+  .book-form :global(.form-submit) { justify-self: start; }
 </style>

@@ -1,5 +1,9 @@
 ---
+import '../styles/fonts.css';
 import '../styles/global.css';
+import frauncesRoman from '../assets/fonts/fraunces-roman.woff2?url';
+import frauncesItalic from '../assets/fonts/fraunces-italic.woff2?url';
+import geist from '../assets/fonts/geist.woff2?url';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
@@ -26,12 +30,9 @@ const {
     <meta name="theme-color" content="#0f0e0c" />
     <script is:inline>document.documentElement.classList.replace("no-js", "js");</script>
     <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..500,0..100;1,9..144,300..500,0..100&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap"
-    />
+    <link rel="preload" href={frauncesRoman} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={frauncesItalic} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={geist} as="font" type="font/woff2" crossorigin />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -50,6 +51,7 @@ const {
 
     <script>
       import '../scripts/smooth-scroll';
+      import '../scripts/cursor';
     </script>
     <script>
       // Scroll reveals. Elements with [data-reveal] get .is-in once they enter the viewport.
