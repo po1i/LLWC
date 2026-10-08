@@ -55,7 +55,6 @@ if (finePointer && !reduce) {
     const t = e.target as Element;
     root.classList.toggle('cursor-text', !!t.closest(TEXT));
     root.classList.toggle('cursor-btn', !!t.closest('.btn'));
-    root.classList.toggle('cursor-btn-primary', !!t.closest('.btn--primary'));
     root.classList.toggle('cursor-link', !t.closest('.btn') && !!t.closest(INTERACTIVE));
   });
   document.addEventListener('pointerdown', () => root.classList.add('cursor-down'));
