@@ -9,22 +9,21 @@ const FORM_ENDPOINT = site.formEndpoint;
 <section class="section book" id="book" aria-labelledby="book-title">
   <div class="wrap book-grid">
     <div class="book-copy">
-      <p class="label" data-reveal>Book a call</p>
-      <h2 id="book-title" class="display" data-reveal style="--i:1">
-        Twenty minutes.<br />Then <em>a written plan.</em>
+      <h2 id="book-title" class="display" data-reveal>
+        Start with a <span class="nowrap">20-minute</span> call
       </h2>
       <p class="lede" data-reveal style="--i:2">
-        No pitch deck. I ask about your spa, tell you honestly whether ads will work for you,
-        and if they will, send a written plan within 2 business days.
+        I’ll ask about your spa and tell you straight whether paid ads make sense for you right
+        now. If they do, you’ll have a written plan within 2 business days.
       </p>
       <div class="book-cal" data-reveal style="--i:3">
         <Btn href={CAL_URL} label="Pick a time on the calendar" arrow="external" external />
-        <p class="book-note">Opens my calendar. Takes 30 seconds.</p>
+        <p class="book-note">Opens my calendar in a new tab.</p>
       </div>
     </div>
 
     <form class="book-form" action={FORM_ENDPOINT} method="post" data-reveal style="--i:2" novalidate>
-      <p class="form-intro">Prefer to write? Three fields, that is it.</p>
+      <p class="form-intro">Rather write? Send me a note here.</p>
       <div class="field">
         <label for="name">Name</label>
         <input id="name" name="name" type="text" autocomplete="name" required />
@@ -38,7 +37,7 @@ const FORM_ENDPOINT = site.formEndpoint;
         <textarea id="msg" name="message" rows="4" placeholder="More injectable consults, filling weekday slots…"></textarea>
       </div>
       <p class="form-error" role="alert" hidden data-form-error>Please add your name and a valid email.</p>
-      <p class="form-success" role="status" hidden data-form-success>Got it. I reply within one business day.</p>
+      <p class="form-success" role="status" hidden data-form-success>Thanks, I’ll reply within one business day.</p>
       <Btn type="submit" label="Send message" variant="ghost" arrow="right" class="form-submit" />
     </form>
   </div>

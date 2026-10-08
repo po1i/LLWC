@@ -28,8 +28,8 @@ const tiers = [
     features: [
       'Everything in Growth, same scope',
       `${usd(price.founding)} a month for your first ${price.foundingMonths} months`,
-      'In exchange: a case study and a testimonial',
-      'And permission to use your spa’s name',
+      'In return: a case study and a testimonial',
+      'Plus permission to mention your spa by name',
     ],
     cta: 'Ask about a founding spot',
     founding: true,
@@ -41,14 +41,13 @@ const tiers = [
   <div class="wrap">
     <div class="section-head">
       <div>
-        <p class="label" data-reveal>Pricing</p>
-        <h2 id="pricing-title" class="display" data-reveal style="--i:1">
-          Flat fees. <em>No percentage of spend.</em>
+        <h2 id="pricing-title" class="display" data-reveal>
+          A flat monthly fee, never a percentage of spend
         </h2>
       </div>
       <p class="lede" data-reveal style="--i:2">
-        Agencies that charge a cut of your ad spend are paid to spend more. I am paid to make it
-        work. {terms.minimumMonths}-month minimum, then month to month with
+        Agencies that take a cut of your ad spend make more when you spend more. I’d rather be
+        paid for results. There’s a {terms.minimumMonths}-month minimum, then it’s month to month with
         {terms.noticePeriod ?? <Tbd label="notice period" />} written notice.
       </p>
     </div>

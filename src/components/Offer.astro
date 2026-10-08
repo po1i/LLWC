@@ -21,20 +21,18 @@ const excludes = [
   <div class="wrap">
     <div class="section-head">
       <div>
-        <p class="label" data-reveal>What you are buying</p>
-        <h2 id="offer-title" class="display" data-reveal style="--i:1">
-          One plan. <em>Nothing hidden.</em>
+        <h2 id="offer-title" class="display" data-reveal>
+          What you get each month
         </h2>
       </div>
       <p class="lede" data-reveal style="--i:2">
-        Everything a med spa needs to turn ads into booked consults. What is included, what is
-        not, and what it costs is written down before you pay a cent.
+        One plan, priced up front. Everything that’s in it and everything that isn’t is listed
+        below, and it’s all in writing before you sign anything.
       </p>
     </div>
 
     <article class="card" data-reveal aria-labelledby="growth-title">
       <div class="card-main">
-        <p class="label">The plan</p>
         <h3 id="growth-title" class="display card-title">Growth</h3>
         <p class="card-tag">Ads, landing page and tracking, set up and run for you.</p>
         <p class="price">
@@ -43,13 +41,14 @@ const excludes = [
         </p>
 
         <aside class="founding" aria-label="Founding offer">
-          <p class="founding-flag">Founding offer · {price.foundingSpots} spots</p>
+          <p class="founding-flag">Founding offer, {price.foundingSpots} spots</p>
           <p class="founding-price">
             <strong>{usd(price.founding)} a month</strong> for your first {price.foundingMonths} months,
             then {usd(price.growth)}.
           </p>
           <p class="founding-terms">
-            In exchange: a case study, a testimonial, and permission to use your spa’s name.
+            In return I ask for a case study, a testimonial, and permission to mention your spa
+            by name.
           </p>
         </aside>
 
@@ -96,7 +95,7 @@ const excludes = [
   .card-spec { background: var(--bg-2); border-top: 1px solid var(--line); }
   @media (min-width: 56rem) { .card-spec { border-top: 0; border-left: 1px solid var(--line); } }
 
-  .card-title { font-size: var(--t-1); margin-top: 0.25rem; }
+  .card-title { font-size: var(--t-1); }
   .card-tag { color: var(--ink-2); max-width: 32ch; }
 
   .price {

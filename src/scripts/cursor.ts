@@ -10,7 +10,7 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 if (finePointer && !reduce) {
   const root = document.documentElement;
 
-  /* ── Cursor ───────────────────────────────────── */
+  // cursor
   const dot = document.createElement('div');
   const ring = document.createElement('div');
   dot.className = 'cursor-dot';
@@ -64,7 +64,7 @@ if (finePointer && !reduce) {
     visible = false;
   });
 
-  /* ── Magnetic buttons ─────────────────────────── */
+  // magnetic buttons
   type Mag = { el: HTMLElement; inner: HTMLElement | null; x: number; y: number; tx: number; ty: number; raf: number };
 
   const animate = (m: Mag) => {

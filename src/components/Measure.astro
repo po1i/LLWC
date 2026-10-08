@@ -4,15 +4,15 @@ import Tbd from './Tbd.astro';
 const metrics = [
   {
     name: 'Leads',
-    body: 'Every form, call and message that comes from an ad. Counted as it arrives, not estimated.',
+    body: 'Every form, call and message that comes in from an ad. These are counted one by one, not modeled.',
   },
   {
     name: 'Cost per lead',
-    body: 'Ad spend divided by leads. The number that decides whether an ad stays or goes.',
+    body: 'Ad spend divided by leads. If it creeps up, I change the ad or the audience before it costs you much.',
   },
   {
     name: 'Booked consults',
-    body: 'Leads that turn into a consult on your calendar, counted from your booking software.',
+    body: 'Leads that end up as a consult on your calendar. I count these from your booking software.',
   },
 ];
 
@@ -42,21 +42,19 @@ const base = import.meta.env.BASE_URL;
   <div class="wrap">
     <div class="section-head">
       <div>
-        <p class="label" data-reveal>How you’ll know it’s working</p>
-        <h2 id="measure-title" class="display" data-reveal style="--i:1">
-          Three numbers. <em>Every week.</em>
+        <h2 id="measure-title" class="display" data-reveal>
+          How you’ll know it’s working
         </h2>
       </div>
       <p class="lede" data-reveal style="--i:2">
-        No vanity metrics and no 30-page report. These three show up in your inbox every week,
-        and on our monthly call we decide what to change.
+        I report on three numbers, the same way every week. On the monthly call we look at them
+        together and decide what to change.
       </p>
     </div>
 
     <ol class="metrics">
       {metrics.map((m, i) => (
         <li class="metric" data-reveal style={`--i:${i + 1}`}>
-          <span class="metric-num" aria-hidden="true">0{i + 1}</span>
           <h3 class="display metric-name">{m.name}</h3>
           <p>{m.body}</p>
         </li>
@@ -104,7 +102,7 @@ const base = import.meta.env.BASE_URL;
     </ul>
 
     <p class="measure-after" data-reveal>
-      <a href="#book" class="link">See if we are a fit <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+      <a href="#book" class="link">Talk it through on a call <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
     </p>
   </div>
 </section>
@@ -129,7 +127,6 @@ const base = import.meta.env.BASE_URL;
     .metric:first-child { padding-left: 0; }
     .metric:last-child { padding-right: 0; }
   }
-  .metric-num { font-family: var(--font-mono); font-size: var(--t-label); letter-spacing: 0.14em; color: var(--brass); }
   .metric-name { font-size: var(--t-2); }
   .metric p { color: var(--ink-2); font-size: var(--t-small); line-height: 1.6; max-width: 34ch; }
 

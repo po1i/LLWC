@@ -39,7 +39,6 @@ void main() {
   vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
   vec2 m = (uMouse - 0.5) * vec2(aspect, 1.0);
 
-  // A soft lens that leans the folds toward the cursor.
   float md = length(p - m);
   p += (m - p) * 0.12 * exp(-md * 2.5);
 
@@ -52,22 +51,18 @@ void main() {
   float body  = smoothstep(0.30, 0.85, f);
   float sheen = pow(1.0 - abs(sin(f * 9.0 + r.x * 3.0)), 8.0) * body;
 
-  vec3 bg    = vec3(0.059, 0.055, 0.047);   // --bg  #0f0e0c
-  vec3 brass = vec3(0.788, 0.651, 0.420);   // --brass #c9a66b
-  // Broad warm glow plus the silk folds and their highlights.
+  vec3 bg    = vec3(0.059, 0.055, 0.047);
+  vec3 brass = vec3(0.788, 0.651, 0.420);
   float glow = smoothstep(1.3, 0.0, length((uv - vec2(0.78, 0.8)) * vec2(aspect * 0.8, 1.0)));
   vec3 col = bg
     + brass * glow * 0.10
     + brass * (body * 0.30 + sheen * 0.55) * (0.55 + 0.45 * glow)
     + vec3(0.08, 0.05, 0.02) * q.x * body;
 
-  // Weight the light to the upper right, away from the copy, and fade
-  // fully to the page colour at the bottom edge so there is no seam.
   float mask = smoothstep(1.15, 0.05, length((uv - vec2(0.8, 0.85)) * vec2(aspect * 0.75, 1.0)));
   mask *= smoothstep(0.0, 0.35, uv.y);
   col = mix(bg, col, mask);
 
-  // Fine grain to prevent banding in the dark gradients.
   col += (hash(gl_FragCoord.xy + fract(uTime)) - 0.5) * 0.012;
   gl_FragColor = vec4(col, 1.0);
 }

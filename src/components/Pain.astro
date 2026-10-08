@@ -1,5 +1,4 @@
 ---
-import { site } from '../data/site';
 
 const lines = [
   'You boosted a post for injectables week. It got likes, not consults.',
@@ -10,19 +9,17 @@ const lines = [
 
 <section class="section pain" aria-labelledby="pain-title">
   <div class="wrap">
-    <h2 id="pain-title" class="label" data-reveal>Sound familiar</h2>
+    <h2 id="pain-title" class="pain-title" data-reveal>Where it usually goes wrong</h2>
     <ol class="pain-list">
       {lines.map((l, i) => (
         <li class="display" data-reveal style={`--i:${i + 1}`}>
-          <span class="num" aria-hidden="true">0{i + 1}</span>
           {l}
         </li>
       ))}
     </ol>
     <p class="pain-after lede" data-reveal>
-      {site.brand} is for med spa owners who are done with all three. Here is exactly what you
-      are buying.
-      <a href="#offer" class="link">Read on <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+      If any of that sounds like your spa, here’s what I’d do about it.
+      <a href="#offer" class="link">See the plan <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
     </p>
   </div>
 </section>
@@ -32,17 +29,15 @@ const lines = [
   .pain-list li {
     font-size: var(--t-1);
     max-width: 24ch;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: clamp(1rem, 3vw, 2rem);
-    align-items: baseline;
+    padding-left: clamp(1rem, 3vw, 2rem);
+    border-left: 1px solid rgb(201 166 107 / 0.45);
   }
-  .num {
-    font-family: var(--font-mono);
-    font-size: var(--t-label);
-    letter-spacing: 0.14em;
-    color: var(--brass);
-    padding-top: 0.4em;
+  .pain-list li:nth-child(2) { margin-left: clamp(0rem, 8vw, 8rem); }
+  .pain-list li:nth-child(3) { margin-left: clamp(0rem, 4vw, 4rem); }
+  .pain-title {
+    font-size: var(--t-small);
+    font-weight: 500;
+    color: var(--ink-2);
   }
   .pain-after {
     margin-top: clamp(2.5rem, 5vw, 4rem);

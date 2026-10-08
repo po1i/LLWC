@@ -7,9 +7,8 @@ const credit = site.terms.deadlineCredit;
 <section class="section process" id="process" aria-labelledby="process-title">
   <div class="wrap process-grid">
     <div class="process-sticky">
-      <p class="label" data-reveal>How it works</p>
-      <h2 id="process-title" class="display" data-reveal style="--i:1">
-        Three steps.<br /><em>No homework.</em>
+      <h2 id="process-title" class="display" data-reveal>
+        From first call to live ads in about two weeks
       </h2>
       <p class="step-counter" aria-hidden="true">
         <span data-step-current>01</span><span class="of">/ 03</span>
@@ -21,8 +20,9 @@ const credit = site.terms.deadlineCredit;
         <span class="step-num" aria-hidden="true">01</span>
         <h3 class="display step-title">A 20-minute call, then a written plan within 2 business days.</h3>
         <p class="lede">
-          I ask about your treatments, your margins and how many consults you can take. You get a
-          written plan: audiences, budget, what I expect to happen, and when.
+          We talk through your treatments, your margins and how many new consults you can
+          actually take. Then I send a written plan covering audiences, budget, and what to expect
+          in the first 60 days.
         </p>
       </li>
 
@@ -30,8 +30,8 @@ const credit = site.terms.deadlineCredit;
         <span class="step-num" aria-hidden="true">02</span>
         <h3 class="display step-title">Built and live within two weeks.</h3>
         <p class="lede">
-          Ads, copy, landing page and tracking, built by me and approved by you in one review. You
-          never touch an ad manager.
+          I write the ads, build the landing page and set up tracking. You review it once, and you
+          won’t need to log into Ads Manager.
         </p>
         {credit === null ? (
           <p class="step-note"><Tbd label="Missed-deadline credit: exact wording from the agreement, or remove" /></p>
@@ -42,10 +42,11 @@ const credit = site.terms.deadlineCredit;
 
       <li class="step" data-step="03" data-reveal>
         <span class="step-num" aria-hidden="true">03</span>
-        <h3 class="display step-title">You see the numbers that matter.</h3>
+        <h3 class="display step-title">A weekly email and a monthly call.</h3>
         <p class="lede">
-          Leads, cost per lead and booked consults, in a weekly email and a monthly 20-minute call.
-          Revenue too, if you choose to share it. I cut what fails and scale what works.
+          Each week you get leads, cost per lead and booked consults (plus revenue, if you want to
+          share it). Ads that aren’t pulling their weight get paused, and the budget moves to the
+          ones that are.
         </p>
       </li>
     </ol>
@@ -76,7 +77,7 @@ const credit = site.terms.deadlineCredit;
     .process-sticky { position: sticky; top: 7rem; align-self: start; }
   }
 
-  .process-sticky .display { font-size: var(--t-1); margin-top: 1.25rem; }
+  .process-sticky .display { font-size: var(--t-2); max-width: 16ch; }
 
   .step-counter {
     margin-top: 2rem;

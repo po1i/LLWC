@@ -7,9 +7,8 @@ const { price, terms, founder } = site;
 <section class="section faq" id="faq" aria-labelledby="faq-title">
   <div class="wrap faq-grid">
     <div>
-      <p class="label" data-reveal>Questions</p>
-      <h2 id="faq-title" class="display" data-reveal style="--i:1">
-        Asked by <em>every owner</em> I talk to.
+      <h2 id="faq-title" class="display" data-reveal>
+        Questions
       </h2>
     </div>
     <div class="faq-list">
@@ -18,8 +17,8 @@ const { price, terms, founder } = site;
         <div class="faq-body">
           <p>
             The minimum is {usd(price.adSpendMin)} a month, paid directly to Meta. On the first call
-            I work backwards from what a new patient is worth to you and recommend a number. If it
-            does not make sense for your margins, I will say so.
+            I’ll work backwards from what a new patient is worth to you and suggest a number. If
+            the math doesn’t work for your margins, I’ll tell you.
           </p>
         </div>
       </details>
@@ -41,8 +40,8 @@ const { price, terms, founder } = site;
         <div class="faq-body">
           <p>
             Campaigns go live within two weeks of approving the plan. Expect the first two to four
-            weeks to be learning, then a clear trend by the end of month two. You get the honest
-            timeline on the call.
+            weeks to be learning, and a clear trend by the end of month two. I’ll give you a
+            more specific timeline on the call once I know your market.
           </p>
         </div>
       </details>
@@ -51,8 +50,8 @@ const { price, terms, founder } = site;
         <summary><span>Which platforms do you run ads on?</span><span class="faq-icon" aria-hidden="true"></span></summary>
         <div class="faq-body">
           <p>
-            Facebook and Instagram only. That is where med spa patients follow providers, compare
-            before-and-afters and decide where to book.
+            Facebook and Instagram only. That’s where most med spa patients follow providers, look
+            at before-and-afters and decide where to book.
           </p>
         </div>
       </details>
@@ -61,8 +60,8 @@ const { price, terms, founder } = site;
         <summary><span>How do you handle patient privacy and tracking?</span><span class="faq-icon" aria-hidden="true"></span></summary>
         <div class="faq-body">
           <p>
-            There are no ad pixels on your booking pages, so nothing about who books or what they
-            book is sent to Meta. Results are measured from lead counts and from booked consults
+            I don’t put ad pixels on your booking pages, so nothing about who books or what they
+            book gets sent to Meta. Results are measured from lead counts and from booked consults
             in your own booking software. Patient records stay where they are.
           </p>
         </div>
@@ -73,7 +72,7 @@ const { price, terms, founder } = site;
         <div class="faq-body">
           <p>
             Me, {founder.name}, directly. I plan, build and run your account, write your weekly
-            email and take your monthly call. No hand-off to a junior account manager.
+            email and take your monthly call. You won’t get handed off to an account manager.
           </p>
         </div>
       </details>
@@ -84,7 +83,7 @@ const { price, terms, founder } = site;
 <style>
   .faq-grid { display: grid; gap: 2.5rem; }
   @media (min-width: 56rem) { .faq-grid { grid-template-columns: 5fr 7fr; gap: clamp(3rem, 8vw, 8rem); } }
-  .faq-grid .display { font-size: var(--t-1); margin-top: 1.25rem; max-width: 12ch; }
+  .faq-grid .display { font-size: var(--t-1); max-width: 12ch; }
 
   .faq-item { border-top: 1px solid var(--line); }
   .faq-item:last-child { border-bottom: 1px solid var(--line); }
