@@ -61,6 +61,25 @@ This project currently lives in a folder of another repository. To publish it on
    included workflow builds and deploys on every push to `main`.
 3. With a custom domain, set `SITE_BASE` to `/` in `.github/workflows/deploy.yml`.
 
+## Motion and the background drawing
+
+- Smooth scrolling (Lenis), scroll reveals, the hero entrance, the pill-to-dialog morph and the
+  background drawing all switch off when the visitor asks for reduced motion. The page is complete
+  without any of them, and without JavaScript.
+- The background is Archimedes' construction from *Measurement of a Circle*, Proposition 3: a
+  circle between an inscribed and a circumscribed polygon. The sides double, 6 → 12 → 24 → 48 → 96,
+  as each section heading (`#how-title`, `#mission-title`, `#faq-title`, `#final-title`) passes
+  62% of the viewport. It only moves forward: scrolling back keeps the stage already reached. At
+  96 sides the circle closes. A signup anywhere finishes the construction and traces the closed
+  circle once in red, and the closed state lasts for the browser session.
+- On a mouse, the edge nearest the pointer shows its construction lines; resting there previews
+  the next doubling for that one edge. It never reacts over controls or the forms.
+- It renders only while something is changing, pauses under the demo plate and in background
+  tabs, shows on phones only at the top and the bottom of the page, and is left out entirely in
+  forced-colors and high-contrast modes and in print.
+- Code: `src/scripts/archimedes.ts` (layout, timing, colors) and `src/data/archimedes.ts`
+  (stages and starting angle).
+
 ## Fonts
 
 Literata (TypeTogether) and Atkinson Hyperlegible Next (Braille Institute), both under the SIL Open

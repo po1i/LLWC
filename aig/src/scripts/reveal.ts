@@ -37,3 +37,5 @@ if (root.classList.contains('motion') && 'IntersectionObserver' in window) {
   // never leave anything hidden in print
   window.addEventListener('beforeprint', () => pending.forEach((el) => el.classList.remove('rv-pending')));
 }
+
+export {};

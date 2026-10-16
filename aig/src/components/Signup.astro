@@ -2,8 +2,8 @@
 import { site } from '../data/site';
 import { signupConfig } from '../data/signup.config';
 
-interface Props { id: string; autofocus?: boolean }
-const { id, autofocus = false } = Astro.props;
+interface Props { id: string; autofocus?: boolean; halo?: boolean }
+const { id, autofocus = false, halo = false } = Astro.props;
 
 const action =
   signupConfig.provider === 'loops' && signupConfig.loops.formId
@@ -14,7 +14,7 @@ const action =
 const privacyHref = `${import.meta.env.BASE_URL}${site.privacyUrl}`;
 ---
 
-<div class="signup" data-signup-box data-state="idle">
+<div class:list={["signup", { halo }]} data-signup-box data-state="idle">
   <form class="signup-form" data-signup novalidate method="post" action={action}>
     <label class="signup-label ui" for={id}>Email address</label>
     <div class="signup-row">

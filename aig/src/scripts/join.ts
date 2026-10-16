@@ -59,6 +59,7 @@ if (pill && dialog && typeof dialog.showModal === 'function') {
       return;
     }
     dialog.classList.add('vt-morph');
+    document.documentElement.classList.add('vt-join');
     pill.style.viewTransitionName = 'join';
     const vt = (document as any).startViewTransition(() => {
       pill.style.viewTransitionName = '';
@@ -69,6 +70,7 @@ if (pill && dialog && typeof dialog.showModal === 'function') {
     vt.finished.finally(() => {
       panel.style.viewTransitionName = '';
       dialog.classList.remove('vt-morph');
+      document.documentElement.classList.remove('vt-join');
     });
   };
 
@@ -82,6 +84,7 @@ if (pill && dialog && typeof dialog.showModal === 'function') {
     const pillWillShow = pastHero && !nearFinal && !done();
     if (how === 'morph' && canMorph() && pillWillShow && !isPhone()) {
       dialog.classList.add('vt-morph');
+      document.documentElement.classList.add('vt-join');
       panel.style.viewTransitionName = 'join';
       const vt = (document as any).startViewTransition(() => {
         panel.style.viewTransitionName = '';
@@ -92,6 +95,7 @@ if (pill && dialog && typeof dialog.showModal === 'function') {
       vt.finished.finally(() => {
         pill.style.viewTransitionName = '';
         dialog.classList.remove('vt-morph');
+        document.documentElement.classList.remove('vt-join');
         finish();
       });
       return;
@@ -133,6 +137,13 @@ if (pill && dialog && typeof dialog.showModal === 'function') {
   // click on the backdrop (the dialog box itself, outside the panel)
   dialog.addEventListener('click', (e) => {
     if (e.target === dialog) close('plain');
+  });
+  // while the opening morph runs, the browser sends clicks to <html>; one that
+  // lands outside the panel is still a backdrop click
+  document.addEventListener('click', (e) => {
+    if (!dialog.open || e.target !== document.documentElement) return;
+    const r = panel.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) close('plain');
   });
   dialog.addEventListener('close', () => {
     if (document.documentElement.classList.contains('is-locked')) {

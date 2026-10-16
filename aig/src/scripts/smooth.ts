@@ -32,3 +32,5 @@ if (root.classList.contains('motion')) {
     });
   });
 }
+
+export {};

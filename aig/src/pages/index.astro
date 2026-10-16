@@ -29,5 +29,14 @@ import JoinDialog from '../components/JoinDialog.astro';
     import '../scripts/reveal';
     import '../scripts/join';
     import '../scripts/smooth';
+    import { startArchimedes } from '../scripts/archimedes';
+
+    // the background drawing waits until the page has settled
+    const later = () =>
+      'requestIdleCallback' in window
+        ? requestIdleCallback(startArchimedes, { timeout: 1200 })
+        : setTimeout(startArchimedes, 200);
+    if (document.readyState === 'complete') later();
+    else addEventListener('load', later, { once: true });
   </script>
 </Base>
