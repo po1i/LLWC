@@ -34,9 +34,10 @@ const privacyHref = `${import.meta.env.BASE_URL}${site.privacyUrl}`;
       />
       <button class="signup-button ui" type="submit" aria-disabled="false">
         <span class="b-idle">Join early access</span>
-        <span class="b-busy" aria-hidden="true">Sending<span class="dots"><span>.</span><span>.</span><span>.</span></span></span>
+        <span class="b-busy">Sending<span class="dots" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span></span>
       </button>
     </div>
+    <span class="sr-only" role="status" data-signup-status></span>
     <div class="hp" aria-hidden="true">
       <label>Company <input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
     </div>
@@ -101,7 +102,7 @@ const privacyHref = `${import.meta.env.BASE_URL}${site.privacyUrl}`;
     position: relative;
     height: 54px;
     padding: 0 22px;
-    border: 0;
+    border: 1px solid transparent;
     border-radius: 2px;
     background: var(--ink);
     color: var(--leaf);
@@ -115,7 +116,7 @@ const privacyHref = `${import.meta.env.BASE_URL}${site.privacyUrl}`;
   .signup-button:hover { background: var(--ink-hover); }
   .signup-button:active { background: #000; }
   .signup-button[aria-disabled='true'] { cursor: progress; }
-  .b-busy { position: absolute; inset: 0; display: grid; place-items: center; visibility: hidden; }
+  .b-busy { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; visibility: hidden; }
   [data-state='loading'] .b-idle { visibility: hidden; }
   [data-state='loading'] .b-busy { visibility: visible; }
   .dots span { opacity: 0.25; }
@@ -157,6 +158,7 @@ const privacyHref = `${import.meta.env.BASE_URL}${site.privacyUrl}`;
     line-height: 32px;
   }
   .done-body { margin-top: 4px; font-size: var(--s-18); line-height: 28px; overflow-wrap: anywhere; }
+  .done-stamp:empty { display: none; }
   .done-stamp {
     margin-top: 14px;
     padding-top: 10px;

@@ -1,16 +1,17 @@
 // Progressive enhancement for Fig. 1. Level switching already works without
 // this file (native radios + CSS :has). This adds drag, number keys,
-// Home/End, a settled-level announcement, replay after drag, a one-time
-// nudge, and keeps the figure from animating while off-screen.
+// Home/End, replay after drag, a one-time nudge, and keeps the figure from
+// animating while off-screen. Focus always lands on the selected radio, so
+// screen readers announce the level without a separate live region.
 
 const demo = document.querySelector<HTMLElement>('[data-demo]');
 
 if (demo) {
   const radios = Array.from(demo.querySelectorAll<HTMLInputElement>('input[name="level"]'));
   const scale = demo.querySelector<HTMLElement>('[data-scale]')!;
+  const track = demo.querySelector<HTMLElement>('.scale-inner')!;
   const rail = demo.querySelector<HTMLElement>('[data-rail]')!;
   const carriage = demo.querySelector<HTMLElement>('[data-carriage]')!;
-  const live = demo.querySelector<HTMLElement>('[data-live]')!;
   const fig = demo.querySelector<HTMLElement>('[data-fig]')!;
   const layers = Array.from(demo.querySelectorAll<SVGGElement>('[data-layer]'));
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -19,30 +20,20 @@ if (demo) {
 
   let current = Number(radios.find((r) => r.checked)?.value ?? 1);
   let touched = false;
-  let announceTimer = 0;
 
   const markCurrent = () => {
     layers.forEach((g) => g.toggleAttribute('data-current', Number(g.dataset.layer) === current));
   };
 
-  const announce = () => {
-    clearTimeout(announceTimer);
-    announceTimer = window.setTimeout(() => {
-      const label = radios[current - 1].dataset.label;
-      live.textContent = `Now showing: ${label}, level ${current} of ${total}.`;
-    }, 350);
-  };
-
-  const select = (n: number, opts: { focus?: boolean; quiet?: boolean } = {}) => {
+  const select = (n: number, opts: { focus?: boolean } = {}) => {
     n = clamp(n, 1, total);
     const r = radios[n - 1];
     if (!r.checked) r.checked = true;
-    if (opts.focus) r.focus();
+    if (opts.focus) r.focus({ preventScroll: true });
     if (n === current) return;
     current = n;
     demo.dataset.lvl = String(n);
     markCurrent();
-    if (!opts.quiet) announce();
   };
 
   demo.dataset.lvl = String(current);
@@ -69,60 +60,75 @@ if (demo) {
 
   // Drag: the ribbon follows the pointer 1:1 and readings swap instantly at
   // each midpoint. On release the ribbon snaps and the reading resolves once.
-  let drag: { id: number; x0: number; active: boolean } | null = null;
+  // A mostly vertical gesture is left to the page so phones can still scroll.
+  type Drag = { id: number; type: string; x0: number; y0: number; start: number; active: boolean; width: number; left: number };
+  let drag: Drag | null = null;
   let suppressClick = false;
 
-  const levelAt = (clientX: number) => {
-    const r = rail.getBoundingClientRect();
-    const f = clamp((clientX - r.left) / r.width, 0, 0.9999);
-    return { f, n: Math.floor(f * total) + 1, width: r.width };
+  const reset = () => {
+    drag = null;
+    demo.classList.remove('is-dragging');
+    carriage.style.transform = '';
   };
 
-  scale.addEventListener('pointerdown', (e) => {
+  track.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;
-    drag = { id: e.pointerId, x0: e.clientX, active: false };
+    suppressClick = false;
+    const r = rail.getBoundingClientRect();
+    drag = { id: e.pointerId, type: e.pointerType, x0: e.clientX, y0: e.clientY, start: current, active: false, width: r.width, left: r.left };
   });
 
-  scale.addEventListener('pointermove', (e) => {
+  track.addEventListener('dragstart', (e) => e.preventDefault());
+
+  track.addEventListener('pointermove', (e) => {
     if (!drag || e.pointerId !== drag.id) return;
+    if (e.pointerType === 'mouse' && e.buttons === 0) return reset();
     if (!drag.active) {
-      if (Math.abs(e.clientX - drag.x0) < 6) return;
+      const dx = Math.abs(e.clientX - drag.x0);
+      const dy = Math.abs(e.clientY - drag.y0);
+      if (dx < 8 && dy < 8) return;
+      if (dy >= dx) return reset();
       drag.active = true;
       touched = true;
-      scale.setPointerCapture(e.pointerId);
+      track.setPointerCapture(e.pointerId);
       demo.classList.add('is-dragging');
     }
-    const { f, n, width } = levelAt(e.clientX);
-    const lo = 0.5 / total, hi = 1 - lo;
-    carriage.style.transform = `translateX(${(clamp(f, lo, hi) - lo) * width}px)`;
-    select(n, { quiet: true });
+    const f = clamp((e.clientX - drag.left) / drag.width, 0, 0.9999);
+    const lo = 0.5 / total;
+    carriage.style.transform = `translateX(${(clamp(f, lo, 1 - lo) - lo) * drag.width}px)`;
+    select(Math.floor(f * total) + 1);
   });
 
   const endDrag = (e: PointerEvent) => {
     if (!drag || e.pointerId !== drag.id) return;
-    const wasActive = drag.active;
-    drag = null;
-    if (!wasActive) return;
-    suppressClick = true;
-    carriage.style.transform = '';
-    demo.classList.remove('is-dragging');
+    const d = drag;
+    reset();
+    if (!d.active) return;
+    if (e.type === 'pointercancel') {
+      select(d.start);
+      return;
+    }
+    // A mouse release over a label fires a click; don't let it re-select.
+    suppressClick = d.type === 'mouse';
+    window.setTimeout(() => (suppressClick = false), 0);
     radios[current - 1].focus({ preventScroll: true });
     if (!reduce.matches) {
       demo.classList.add('replay');
       void demo.offsetWidth;
       demo.classList.remove('replay');
     }
-    announce();
   };
-  scale.addEventListener('pointerup', endDrag);
-  scale.addEventListener('pointercancel', endDrag);
+  track.addEventListener('pointerup', endDrag);
+  track.addEventListener('pointercancel', endDrag);
+  window.addEventListener('pointerup', endDrag);
+  window.addEventListener('pointercancel', endDrag);
+
   scale.addEventListener(
     'click',
     (e) => {
-      if (suppressClick) {
-        e.preventDefault();
-        suppressClick = false;
-      }
+      if (!suppressClick) return;
+      e.preventDefault();
+      suppressClick = false;
     },
     true,
   );

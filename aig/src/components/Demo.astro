@@ -3,6 +3,7 @@ import Figure1 from './Figure1.astro';
 import { levels, question, equation, citation } from '../data/demo';
 
 const N = levels.length;
+const FIG_H = [142, 142, 270, 270, 372]; // visible drawing height per level, in viewBox units
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 // Paragraph -> sentences wrapped for the staggered resolve; *term* -> <em>.
@@ -10,6 +11,7 @@ let si = 0;
 const renderPara = (p: string) => {
   const html = esc(p)
     .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    .replace(/_([^_\s]+)_/g, '<i class="m">$1</i>')
     .replace(
       '[cite]',
       `<sup class="cite"><a href="#cite-1" aria-label="Source 1">1</a></sup>`,
@@ -48,6 +50,7 @@ const states: string[] = [];
 for (let n = 1; n <= N; n++) {
   for (const S of [`.demo.demo[data-lvl="${n}"]`, `.demo.demo:has(#lvl-${n}:checked)`]) {
     states.push(`${S}{--lvl:${n}}`);
+    states.push(`${S} .fig-art{--fig-h:${FIG_H[n - 1]}}`);
     states.push(`${S} .reading[data-level="${n}"]{--on:1;--ease:var(--resolve);visibility:visible;transition-delay:0s}`);
     states.push(`${S} .side-level[data-level="${n}"]{--on:1;visibility:visible;transition-delay:0s}`);
     for (let k = n + 1; k <= N; k++) states.push(`${S} .fig1-svg [data-layer="${k}"]{--vis:0}`);
@@ -91,8 +94,10 @@ const stateCss = baseCss + '\n' + states.join('\n');
                   data-label={l.label}
                 />
                 <span class="sr-only">Level {l.n} of {N}, </span>
-                <span class="stop-n ui" aria-hidden="true">{l.n}</span>
-                <span class:list={['stop-name ui', { 'stop-end': l.n === 1 || l.n === N }]}>{l.label}</span>
+                <span class="stop-face">
+                  <span class="stop-n ui" aria-hidden="true">{l.n}</span>
+                  <span class:list={['stop-name ui', { 'stop-end': l.n === 1 || l.n === N }]}>{l.label}</span>
+                </span>
               </label>
             ))}
           </div>
@@ -114,20 +119,20 @@ const stateCss = baseCss + '\n' + states.join('\n');
         </div>
 
         <div class="side c-side">
-          <figure class="fig1" data-fig>
+          <div class="fig1" data-fig>
             <div class="fig-art"><Figure1 /></div>
             <div class="side-stack">
               {readings.map((r) => (
                 <div class="side-level" data-level={r.n}>
                   <p class="sr-only">Figure: {r.figureDesc}</p>
-                  <figcaption class="note fig-cap"><span class="smallcaps fig-n">Fig. 1.</span> {r.caption}</figcaption>
+                  <p class="note fig-cap"><span class="smallcaps fig-n">Fig. 1.</span> {r.caption}</p>
                   <dl class="jump note">
                     <div><dt class="smallcaps">Assumes</dt><dd>{r.assumes}</dd></div>
                     <div><dt class="smallcaps">Added</dt><dd>{r.added}</dd></div>
                   </dl>
                   {r.n === 4 && (
                     <dl class="symbols note">
-                      {equation.symbols.map(([s, d]) => <div><dt>{s}</dt><dd>{d}</dd></div>)}
+                      {equation.symbols.map(([s, d]) => <div><dt set:html={s} /><dd>{d}</dd></div>)}
                     </dl>
                   )}
                   {r.n === N && (
@@ -139,11 +144,10 @@ const stateCss = baseCss + '\n' + states.join('\n');
                 </div>
               ))}
             </div>
-          </figure>
+          </div>
         </div>
       </div>
 
-      <p class="sr-only" aria-live="polite" data-live></p>
     </div>
   </div>
 
@@ -177,15 +181,20 @@ const stateCss = baseCss + '\n' + states.join('\n');
   .c-scale, .c-read { grid-column: text; }
   .c-side { grid-column: text; }
   @media (min-width: 768px) { .c-scale { grid-column: text-start / span 5; } }
+  @media (min-width: 768px) and (max-width: 1199px) { .demo-intro { grid-row: span 2; align-self: start; } }
+  @media (min-width: 1024px) and (max-width: 1199px) {
+    .c-read { grid-column: text-start / span 5; }
+    .c-side { grid-column: 6 / full-end; }
+  }
   @media (min-width: 1200px) {
     .c-scale, .c-read { grid-column: text-start / span 6; }
     .c-side { grid-column: 9 / full-end; }
   }
 
   /* the scale */
-  .scale { border: 0; padding: 0; margin-top: calc(var(--u) * 5); min-inline-size: 0; container-type: inline-size; touch-action: pan-y; }
+  .scale { border: 0; padding: 0; margin-top: calc(var(--u) * 5); min-inline-size: 0; container-type: inline-size; touch-action: pan-y; -webkit-user-select: none; user-select: none; }
   .scale-inner { position: relative; }
-  .rail { position: absolute; inset: 0 0 auto 0; height: 34px; pointer-events: none; }
+  .rail { position: absolute; inset: 0 0 auto 0; height: 34px; pointer-events: none; overflow-x: clip; }
   .rule { position: absolute; left: 0; right: 0; top: 12px; height: 1px; background: var(--control); }
   .tick { position: absolute; top: 6px; width: 1px; height: 13px; background: var(--control); left: calc(10% + var(--k) * 20%); }
   .carriage {
@@ -214,12 +223,13 @@ const stateCss = baseCss + '\n' + states.join('\n');
     -webkit-tap-highlight-color: transparent;
   }
   .stop-input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+  .stop-face { display: grid; justify-items: center; gap: 2px; padding: 2px 6px; border-radius: 2px; }
+  .stop-input:focus-visible ~ .stop-face { outline: 2px solid var(--ink); outline-offset: 2px; }
   .stop-n { font-size: var(--s-14); line-height: 18px; color: var(--graphite); font-variant-numeric: tabular-nums lining-nums; }
   .stop-name { font-size: var(--s-14); line-height: 20px; color: var(--graphite); transition: color 0.16s linear; }
   .stop:hover .stop-name, .stop:hover .stop-n { color: var(--ink); }
-  .stop-input:checked ~ .stop-name { color: var(--ink); font-weight: 600; }
-  .stop-input:checked ~ .stop-n { color: var(--ink); }
-  .stop-input:focus-visible ~ .stop-name { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: 1px; }
+  .stop-input:checked ~ .stop-face .stop-name { color: var(--ink); font-weight: 600; }
+  .stop-input:checked ~ .stop-face .stop-n { color: var(--ink); }
   @container (max-width: 34rem) {
     .stop-name:not(.stop-end) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
     .stop { padding-bottom: 30px; }
@@ -254,11 +264,21 @@ const stateCss = baseCss + '\n' + states.join('\n');
 
   /* the equation */
   .reading-text :global(.eq) { margin-block: calc(var(--u) * 2); }
-  .reading-text :global(.eq-main) { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .reading-text :global(.eq-main) { display: flex; align-items: last baseline; justify-content: space-between; gap: 16px; }
+  .reading-text :global(.eq-body) { padding-left: 1.5em; text-indent: -1.5em; }
   .reading-text :global(.eq-body) { font-variant-numeric: lining-nums; }
   .reading-text :global(.nb) { white-space: nowrap; }
   .reading-text :global(.eq i) { font-style: italic; }
-  .reading-text :global(.ov) { text-decoration: overline; text-decoration-thickness: 1px; text-underline-offset: 0; }
+  .reading-text :global(.ov), .symbols :global(.ov) { position: relative; }
+  .reading-text :global(.ov)::after, .symbols :global(.ov)::after {
+    content: '';
+    position: absolute;
+    left: 0.14em;
+    right: -0.02em;
+    top: 0.06em;
+    border-top: 1px solid currentColor;
+  }
+  .reading-text :global(i.m) { font-style: italic; }
   .reading-text :global(sub), .reading-text :global(sup) { font-size: 0.7em; line-height: 0; position: relative; }
   .reading-text :global(sub) { vertical-align: baseline; top: 0.28em; }
   .reading-text :global(sup) { vertical-align: baseline; top: -0.45em; }
@@ -268,7 +288,7 @@ const stateCss = baseCss + '\n' + states.join('\n');
 
   /* the figure and margin notes */
   .fig1 { margin: 0; }
-  .fig-art { max-width: 380px; }
+  .fig-art { max-width: 380px; aspect-ratio: 380 / var(--fig-h, 372); overflow: hidden; }
   .fig-art :global(svg) { width: 100%; height: auto; overflow: visible; }
   .side-stack { display: grid; margin-top: calc(var(--u) * 2); }
   .side-level { grid-area: 1 / 1; --on: 0; }
@@ -298,6 +318,19 @@ const stateCss = baseCss + '\n' + states.join('\n');
   .fig-art :global(.num) { font-variant-numeric: lining-nums; }
   .fig-art :global(.greek) { font-size: 15px; fill: var(--ink); }
   .fig-art :global(.month) { font-style: normal; font-family: var(--f-ui); font-size: 10px; letter-spacing: 0.04em; }
+  @media (max-width: 767px) {
+    .fig-art :global(text) { font-size: 13px; }
+    .fig-art :global(.month) { font-size: 11px; }
+  }
+  @media (forced-colors: active) {
+    .rail { forced-color-adjust: none; }
+    .rule, .tick { background: CanvasText; }
+    .ribbon { background: Highlight; }
+    .stop-input:checked ~ .stop-face .stop-n { font-weight: 700; text-decoration: underline 2px; text-underline-offset: 3px; }
+    .fig-art :global(svg) { --stroke: CanvasText; }
+    .fig-art :global(text), .fig-art :global(.greek) { fill: CanvasText; }
+    .fig-art :global(.body) { fill: Canvas; }
+  }
 
   /* ---------- state + motion (values switch via the generated rules) ---------- */
   .reading, .side-level { transition: visibility 0s linear 0.16s; }

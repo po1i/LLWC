@@ -3,12 +3,13 @@
 interface Props { label: string }
 const { label } = Astro.props;
 ---
-<mark class="ph" title="Placeholder: replace before launch">[[PLACEHOLDER: {label}]]</mark>
-
 <style>
   .ph {
-    display: inline;
-    padding: 0.05em 0.35em;
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: baseline;
+    line-height: 1.35;
+    padding: 0 0.35em;
     border: 1px dashed var(--control);
     border-radius: 2px;
     background: transparent;
@@ -18,6 +19,6 @@ const { label } = Astro.props;
     font-style: normal;
     font-variant: normal;
     letter-spacing: 0;
-    white-space: normal;
   }
 </style>
+<mark class="ph" title="Placeholder: replace before launch">[[PLACEHOLDER: {label}]]</mark>

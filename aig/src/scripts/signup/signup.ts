@@ -50,7 +50,11 @@ function showSuccess(email: string, opts: { duplicate?: boolean; focusForm?: HTM
     const body = done.querySelector<HTMLElement>('[data-done-body]')!;
     const stamp = done.querySelector<HTMLElement>('[data-done-stamp]')!;
 
-    if (opts.duplicate) {
+    if (opts.duplicate && signupConfig.doubleOptIn) {
+      title.textContent = 'You’ve already asked to join.';
+      body.textContent = `We sent a confirmation link to ${email}. If you can’t find it, check your spam folder, then open it to finish joining.`;
+      stamp.textContent = '';
+    } else if (opts.duplicate) {
       title.textContent = 'You’re already on the list.';
       body.textContent = 'Nothing more to do. We’ll write when your invitation is ready.';
       stamp.textContent = '';
@@ -72,6 +76,8 @@ function showSuccess(email: string, opts: { duplicate?: boolean; focusForm?: HTM
   target?.focus({ preventScroll: false });
 }
 
+const FIELD_ERRORS = new Set(['empty', 'invalid']);
+
 function setError(form: HTMLFormElement, key: keyof typeof MESSAGES | null, custom?: string) {
   const input = form.querySelector<HTMLInputElement>('input[type="email"]')!;
   const msg = form.querySelector<HTMLElement>('[data-signup-msg]')!;
@@ -80,10 +86,13 @@ function setError(form: HTMLFormElement, key: keyof typeof MESSAGES | null, cust
     input.removeAttribute('aria-invalid');
     msg.hidden = true;
     msg.querySelector('[data-msg-text]')!.textContent = '';
+    delete box.dataset.err;
     if (box.dataset.state === 'error') box.dataset.state = 'idle';
     return;
   }
-  input.setAttribute('aria-invalid', 'true');
+  box.dataset.err = key;
+  if (FIELD_ERRORS.has(key)) input.setAttribute('aria-invalid', 'true');
+  else input.removeAttribute('aria-invalid');
   msg.querySelector('[data-msg-text]')!.textContent = custom ?? MESSAGES[key];
   msg.hidden = false;
   box.dataset.state = 'error';
@@ -97,6 +106,8 @@ function setLoading(form: HTMLFormElement, on: boolean) {
   input.readOnly = on;
   button.setAttribute('aria-disabled', String(on));
   form.setAttribute('aria-busy', String(on));
+  const status = form.querySelector<HTMLElement>('[data-signup-status]');
+  if (status) status.textContent = on ? 'Sending…' : '';
 }
 
 for (const form of forms) {
@@ -104,12 +115,15 @@ for (const form of forms) {
   const trap = form.querySelector<HTMLInputElement>('input[name="company"]');
   let attempted = false;
 
+  const box = form.closest<HTMLElement>('[data-signup-box]')!;
+  const fieldError = () => !box.dataset.err || FIELD_ERRORS.has(box.dataset.err);
+
   input.addEventListener('blur', () => {
-    if (!attempted || !input.value) return;
+    if (!attempted || !input.value || !fieldError()) return;
     setError(form, EMAIL_RE.test(normalize(input.value)) ? null : 'invalid');
   });
   input.addEventListener('input', () => {
-    if (form.closest<HTMLElement>('[data-signup-box]')!.dataset.state === 'error' && EMAIL_RE.test(normalize(input.value))) {
+    if (box.dataset.state === 'error' && fieldError() && EMAIL_RE.test(normalize(input.value))) {
       setError(form, null);
     }
   });

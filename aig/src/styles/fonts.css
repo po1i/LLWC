@@ -1,32 +1,35 @@
 /* Literata (TypeTogether) and Atkinson Hyperlegible Next (Braille Institute),
-   both SIL OFL 1.1. Static instances, latin + math subset. */
+   both SIL OFL 1.1. Static instances, latin + math subset.
+   All four are used above the fold and preloaded. font-display: optional means
+   a very slow first visit keeps the size-matched fallbacks for that one view
+   instead of shifting the layout when the fonts arrive. */
 @font-face {
   font-family: 'Literata Display';
   src: url('../assets/fonts/literata-display.woff2') format('woff2');
   font-weight: 360;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 @font-face {
   font-family: 'Literata';
   src: url('../assets/fonts/literata-text.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 @font-face {
   font-family: 'Literata';
   src: url('../assets/fonts/literata-text-italic.woff2') format('woff2');
   font-weight: 400;
   font-style: italic;
-  font-display: swap;
+  font-display: optional;
 }
 @font-face {
   font-family: 'Atkinson Hyperlegible Next';
   src: url('../assets/fonts/atkinson.woff2') format('woff2');
   font-weight: 400 600;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 /* Fallbacks scaled to the web fonts' width and line box, so nothing reflows
