@@ -1,0 +1,16 @@
+---
+import Signup from './Signup.astro';
+---
+<section class="section final" aria-labelledby="final-title">
+  <div class="grid">
+    <div class="section-rule"></div>
+    <h2 id="final-title" class="display h2 c-text">Start from what you already know.</h2>
+    <p class="lede c-text final-lede">Join the early-access list, and we’ll write when your invitation is ready.</p>
+    <div class="c-text final-form"><Signup id="email-bottom" /></div>
+  </div>
+</section>
+
+<style>
+  .final-lede { margin-top: calc(var(--u) * 2); }
+  .final-form { margin-top: calc(var(--u) * 4); }
+</style>

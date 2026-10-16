@@ -1,0 +1,39 @@
+---
+import Signup from './Signup.astro';
+import { site } from '../data/site';
+---
+<section class="hero" aria-labelledby="hero-title">
+  <div class="grid">
+    <h1 id="hero-title" class="display h1 c-wide hero-title">{site.headline}</h1>
+
+    <p class="lede c-text hero-lede">
+      Anybody Is Genius is an AI teacher for adults. A few quick questions find what you already
+      know. Then it teaches just past that, a little each day, and brings ideas back until they
+      stick.
+    </p>
+
+    <div class="row hero-form">
+      <div class="c-text"><Signup id="email-top" /></div>
+      <p class="note c-note hero-note">
+        Below, in Fig. 1: one question answered at five levels, from a child’s explanation to an
+        expert’s.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { padding-top: calc(var(--u) * 6); padding-bottom: calc(var(--u) * 10); }
+  @media (min-width: 1024px) { .hero { padding-top: calc(var(--u) * 15); padding-bottom: calc(var(--u) * 14); } }
+  @media (max-height: 640px), (max-width: 340px) {
+    .hero { padding-top: calc(var(--u) * 3); }
+    .hero-lede { margin-top: calc(var(--u) * 2); }
+    .hero-form { margin-top: calc(var(--u) * 3); }
+  }
+  .hero-title { font-feature-settings: 'lnum'; }
+  .hero-lede { margin-top: calc(var(--u) * 3); }
+  @media (min-width: 1024px) { .hero-lede { margin-top: calc(var(--u) * 4); } }
+  .hero-form { margin-top: calc(var(--u) * 4); }
+  @media (min-width: 1024px) { .hero-form { margin-top: calc(var(--u) * 6); } }
+  .hero-note { align-self: start; padding-top: 2px; }
+</style>
