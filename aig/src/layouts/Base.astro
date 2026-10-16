@@ -21,6 +21,14 @@ const base = import.meta.env.BASE_URL;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      // Set before first paint: motion styles only apply when JS runs and the
+      // visitor hasn't asked for reduced motion.
+      (function (d) {
+        d.classList.add('js');
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion');
+      })(document.documentElement);
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}

@@ -2,8 +2,8 @@
 import { site } from '../data/site';
 import { signupConfig } from '../data/signup.config';
 
-interface Props { id: string }
-const { id } = Astro.props;
+interface Props { id: string; autofocus?: boolean }
+const { id, autofocus = false } = Astro.props;
 
 const action =
   signupConfig.provider === 'loops' && signupConfig.loops.formId
@@ -31,6 +31,7 @@ const privacyHref = `${import.meta.env.BASE_URL}${site.privacyUrl}`;
         required
         placeholder="name@example.org"
         aria-describedby={`${id}-msg ${id}-note`}
+        autofocus={autofocus}
       />
       <button class="signup-button ui" type="submit" aria-disabled="false">
         <span class="b-idle">Join early access</span>
@@ -160,13 +161,27 @@ const privacyHref = `${import.meta.env.BASE_URL}${site.privacyUrl}`;
   .done-body { margin-top: 4px; font-size: var(--s-18); line-height: 28px; overflow-wrap: anywhere; }
   .done-stamp:empty { display: none; }
   .done-stamp {
+    position: relative;
     margin-top: 14px;
     padding-top: 10px;
-    border-top: 1px solid var(--hairline);
     font-size: var(--s-14);
     line-height: 21px;
     color: var(--graphite);
   }
+  .done-stamp::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: var(--ink);
+    opacity: 0.25;
+    transform-origin: left;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    [data-state='done'] .done-stamp::before { animation: rule 1.2s var(--draw) 0.35s both; }
+    [data-state='done'] .done-stamp { animation: fade 0.6s linear 0.9s both; }
+  }
+  @keyframes rule { from { transform: scaleX(0); } }
   [data-state='done'] .signup-form { visibility: hidden; }
   @media (prefers-reduced-motion: no-preference) {
     [data-state='done'] .signup-done { animation: resolve 0.52s var(--resolve) both; }

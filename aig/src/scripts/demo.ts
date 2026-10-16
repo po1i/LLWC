@@ -133,6 +133,56 @@ if (demo) {
     true,
   );
 
+  // "Play all five": walks the levels at reading pace. Any interaction stops it.
+  const tourBtn = demo.querySelector<HTMLButtonElement>('[data-tour]');
+  const tourLabel = demo.querySelector<HTMLElement>('[data-tour-label]');
+  const tourBar = demo.querySelector<HTMLElement>('[data-tour-bar]');
+  if (tourBtn && tourLabel && tourBar) {
+    tourBtn.hidden = false;
+    let timer = 0;
+    let anim: Animation | null = null;
+    const words = (n: number) =>
+      (demo.querySelector(`.reading[data-level="${n}"] .reading-text`)?.textContent ?? '').split(/\s+/).length;
+    const dwell = (n: number) => Math.min(11000, Math.max(5000, words(n) * 95));
+
+    const stopTour = (label = 'Play all five') => {
+      window.clearTimeout(timer);
+      anim?.cancel();
+      anim = null;
+      demo.classList.remove('is-touring');
+      tourBtn.setAttribute('aria-pressed', 'false');
+      tourLabel.textContent = label;
+    };
+    const runFrom = (n: number) => {
+      select(n);
+      const ms = dwell(n);
+      anim?.cancel();
+      anim = tourBar.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: ms, easing: 'linear', fill: 'forwards' });
+      timer = window.setTimeout(() => {
+        if (n >= total) stopTour('Play again');
+        else runFrom(n + 1);
+      }, ms);
+    };
+    tourBtn.addEventListener('click', () => {
+      if (tourBtn.getAttribute('aria-pressed') === 'true') return stopTour('Resume');
+      const resuming = tourLabel.textContent === 'Resume';
+      touched = true;
+      demo.classList.add('is-touring');
+      tourBtn.setAttribute('aria-pressed', 'true');
+      tourLabel.textContent = 'Pause';
+      // from the start after finishing, otherwise from the level on screen
+      runFrom(current >= total && !resuming ? 1 : current);
+    });
+    // the visitor takes over: stop
+    track.addEventListener('pointerdown', () => demo.classList.contains('is-touring') && stopTour());
+    scale.addEventListener('keydown', (e) => {
+      if (e.target === tourBtn) return;
+      if (demo.classList.contains('is-touring')) stopTour();
+    });
+    radios.forEach((r) => r.addEventListener('change', () => demo.classList.contains('is-touring') && stopTour()));
+    document.addEventListener('visibilitychange', () => document.hidden && demo.classList.contains('is-touring') && stopTour('Resume'));
+  }
+
   // Never play the figure's drawing while it is off-screen.
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(

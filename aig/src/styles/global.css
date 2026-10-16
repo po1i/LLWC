@@ -41,6 +41,15 @@
 @media (min-width: 1024px) { :root { --u: 8px; --section: calc(var(--u) * 20); } }
 @media (min-width: 1200px) { :root { --margin: 48px; } }
 
+/* page transitions between the landing page and the privacy page */
+@view-transition { navigation: auto; }
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) { animation: 260ms var(--depart) both vt-out; }
+  ::view-transition-new(root) { animation: 520ms var(--resolve) 80ms both vt-in; }
+}
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(8px); } }
+
 /* reset */
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; }
@@ -59,6 +68,18 @@ body {
 }
 @media (min-width: 1024px) { body { font-size: var(--s-21); } }
 img, svg { display: block; max-width: 100%; }
+
+/* paper: a faint fixed grain under the content, above the background drawing */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .11 0 0 0 0 .1 0 0 0 0 .09 0 0 0 1.1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@media (forced-colors: active) { body::before { display: none; } }
 button, input { font: inherit; color: inherit; }
 ul, ol, dl { padding: 0; list-style: none; }
 h1, h2, h3 { font-weight: inherit; }
@@ -141,6 +162,16 @@ a:hover { text-decoration-thickness: 2px; }
 }
 .ui { font-family: var(--f-ui); font-variant-numeric: lining-nums; }
 
+/* scroll reveals (scripts/reveal.ts): only elements below the fold at load
+   are ever hidden, and only while motion is allowed */
+html.motion .rv-pending { opacity: 0; transform: translateY(18px); }
+html.motion .rv-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.9s var(--resolve), transform 1.1s var(--resolve);
+  transition-delay: calc(var(--rv-i, 0) * 90ms);
+}
+
 /* sections */
 .section { padding-block: var(--section); }
 .section-rule { grid-column: full; height: 1px; background: var(--hairline); margin-bottom: calc(var(--u) * 6); }
@@ -153,3 +184,13 @@ a:hover { text-decoration-thickness: 2px; }
 @media (min-width: 1200px) { .mark { text-align: right; padding-top: 0.35em; } }
 
 .nowrap { white-space: nowrap; }
+
+/* keep the page still behind an open dialog */
+html { scrollbar-gutter: stable; }
+html.is-locked { overflow: hidden; }
+
+/* Lenis (smooth scrolling) */
+html.lenis, html.lenis body { height: auto; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
+.lenis [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-smooth iframe { pointer-events: none; }

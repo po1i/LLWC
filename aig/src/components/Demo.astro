@@ -73,13 +73,14 @@ const stateCss = baseCss + '\n' + states.join('\n');
         One question at five levels. Each reading is about the same length, so what changes is depth.
       </p>
 
-      <fieldset class="scale c-scale" data-scale>
+      <fieldset class="scale c-scale" data-scale data-reveal>
         <legend class="sr-only">Explanation level</legend>
         <div class="scale-inner">
           <div class="rail" aria-hidden="true" data-rail>
             <span class="rule"></span>
             {levels.map((_, i) => <span class="tick" style={`--k:${i}`}></span>)}
             <span class="carriage" data-carriage><span class="ribbon"></span></span>
+            <span class="tour-bar" data-tour-bar></span>
           </div>
           <div class="stops">
             {levels.map((l) => (
@@ -102,13 +103,20 @@ const stateCss = baseCss + '\n' + states.join('\n');
             ))}
           </div>
         </div>
-        <p class="scale-help ui">
-          <span class="help-fine">Click a level, drag the ribbon, or use the arrow keys.</span>
-          <span class="help-coarse">Tap a level, or drag the ribbon.</span>
-        </p>
+        <div class="scale-foot">
+          <p class="scale-help ui">
+            <span class="help-fine">Click a level, drag the ribbon, or use the arrow keys.</span>
+            <span class="help-coarse">Tap a level, or drag the ribbon.</span>
+          </p>
+          <button class="tour ui" type="button" data-tour hidden>
+            <svg class="tour-i tour-play" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.8v8.4L10 6z" /></svg>
+            <svg class="tour-i tour-pause" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 2h2v8H3zM7 2h2v8H7z" /></svg>
+            <span data-tour-label>Play all five</span>
+          </button>
+        </div>
       </fieldset>
 
-      <div class="row demo-body">
+      <div class="row demo-body" data-reveal>
         <div class="readings c-read">
           {readings.map((r) => (
             <article class="reading" data-level={r.n} aria-labelledby={`rh-${r.n}`}>
@@ -235,7 +243,29 @@ const stateCss = baseCss + '\n' + states.join('\n');
     .stop { padding-bottom: 30px; }
   }
 
-  .scale-help { margin-top: 4px; font-size: var(--s-14); line-height: 21px; color: var(--graphite); }
+  .scale-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin-top: 4px; }
+  .scale-help { font-size: var(--s-14); line-height: 21px; color: var(--graphite); }
+  .tour {
+    display: inline-flex; align-items: center; gap: 8px;
+    min-height: 36px; padding: 0 12px 0 10px;
+    border: 1px solid var(--control); border-radius: 999px;
+    background: transparent; color: var(--ink);
+    font-size: var(--s-14); cursor: pointer;
+    transition: border-color 0.2s linear, background-color 0.2s linear;
+  }
+  .tour:hover { border-color: var(--ink); background: rgb(28 27 24 / 0.04); }
+  .tour:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .tour-i { width: 10px; height: 10px; fill: currentColor; }
+  .tour-pause { display: none; }
+  .tour[aria-pressed='true'] .tour-play { display: none; }
+  .tour[aria-pressed='true'] .tour-pause { display: block; }
+  .tour-bar {
+    position: absolute; left: 0; right: 0; top: 12px; height: 1px;
+    background: var(--ink); transform: scaleX(0); transform-origin: left;
+    opacity: 0;
+  }
+  .demo:global(.is-touring) .tour-bar { opacity: 1; }
+  @media (forced-colors: active) { .tour-bar { background: Highlight; } }
   .help-coarse { display: none; }
   @media (pointer: coarse) { .help-fine { display: none; } .help-coarse { display: inline; } }
 

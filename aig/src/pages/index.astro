@@ -8,6 +8,7 @@ import Mission from '../components/Mission.astro';
 import FAQ from '../components/FAQ.astro';
 import FinalSignup from '../components/FinalSignup.astro';
 import Colophon from '../components/Colophon.astro';
+import JoinDialog from '../components/JoinDialog.astro';
 ---
 
 <Base>
@@ -21,8 +22,12 @@ import Colophon from '../components/Colophon.astro';
     <FinalSignup />
   </main>
   <Colophon />
+  <JoinDialog />
   <script>
     import '../scripts/signup/signup';
     import '../scripts/fig2';
+    import '../scripts/reveal';
+    import '../scripts/join';
+    import '../scripts/smooth';
   </script>
 </Base>
